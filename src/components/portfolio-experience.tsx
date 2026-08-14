@@ -15,6 +15,21 @@ const hotspots: Record<HotspotId, { title: string; hint: string }> = {
   contact: { title: "Contact", hint: "Check the phone" },
 };
 
+const skillNotes: Record<string, string> = {
+  Laravel: "My main production toolkit for domain-heavy applications, APIs, queues, scheduled jobs, permissions, reports and integrations.",
+  PHP: "The language underneath most of the systems I ship. I care about readable domain code, predictable behavior and boring maintenance.",
+  "REST APIs": "I design APIs around explicit contracts, validation, authorization, stable response shapes and regression-safe changes.",
+  MySQL: "Schema design, query debugging, reporting, migrations and the kind of data problems where one wrong scope can change the answer completely.",
+  Redis: "Caching, locks, queues and fast ephemeral state — used carefully where it simplifies a system instead of hiding problems.",
+  Queues: "Background work that is retryable, observable and safe to run more than once. Jobs should fail loudly and recover predictably.",
+  "Multi-tenancy": "Tenant boundaries must be impossible to forget. I prefer scoping rules that are explicit, reusable and covered by tests.",
+  Payments: "Payment state is business state. I treat refunds, retries, partial states and gateway callbacks as first-class domain rules.",
+  Reporting: "Reports are only useful when they answer the same question everywhere. I focus on shared query rules and trustworthy exports.",
+  Testing: "Targeted regression tests around the failure mode, not tests for decoration. The goal is to stop the same bug coming back.",
+  Git: "Small reviewable changes, clean history when it matters, and safe promotion between branches without dragging unrelated work along.",
+  "Production debugging": "Reproduce the real failure, follow the data, find the narrowest root cause, then change as little as possible.",
+};
+
 export function PortfolioExperience() {
   const reduceMotion = useReducedMotion();
   const [entered, setEntered] = useState(false);
@@ -202,6 +217,14 @@ function RoomScene({
   onClose: () => void;
   reduceMotion: boolean;
 }) {
+  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+  const [selectedExperience, setSelectedExperience] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (active !== "skills") setSelectedSkill(null);
+    if (active !== "experience") setSelectedExperience(null);
+  }, [active]);
+
   const button = (id: HotspotId, className: string, label: string) => (
     <button
       className={`hotspot ${className} ${active === id ? "is-active" : ""}`}
@@ -223,6 +246,8 @@ function RoomScene({
     event.currentTarget.style.setProperty("--look-x", x.toFixed(3));
     event.currentTarget.style.setProperty("--look-y", y.toFixed(3));
   };
+
+  const selectedExperienceItem = selectedExperience === null ? null : experience[selectedExperience];
 
   return (
     <motion.div
@@ -276,7 +301,44 @@ function RoomScene({
           {active === "skills" && (
             <motion.div className="shelf-skills" initial={reduceMotion ? false : { opacity: 0, x: -18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }}>
               <button className="object-close" type="button" onClick={onClose} aria-label="Close skills">×</button>
-              {skills.map((skill, index) => <span key={skill} style={{ "--book-i": index } as React.CSSProperties}>{skill}</span>)}
+              {skills.map((skill, index) => (
+                <button
+                  key={skill}
+                  type="button"
+                  className="skill-book"
+                  style={{ "--book-i": index } as React.CSSProperties}
+                  onClick={() => setSelectedSkill(skill)}
+                  aria-label={`Open ${skill} book`}
+                >
+                  {skill}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {active === "skills" && selectedSkill && (
+            <motion.div
+              key={selectedSkill}
+              className="open-book"
+              initial={reduceMotion ? false : { opacity: 0, scale: .72, rotateY: -20, x: -55 }}
+              animate={{ opacity: 1, scale: 1, rotateY: 0, x: 0 }}
+              exit={{ opacity: 0, scale: .82, rotateY: -12, x: -30 }}
+              transition={{ duration: .34, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="book-page book-page-left">
+                <small>THE TOOLBOX / {String(skills.indexOf(selectedSkill) + 1).padStart(2, "0")}</small>
+                <h3>{selectedSkill}</h3>
+                <p>Not just a keyword on a CV. This is how it shows up in the systems I actually work on.</p>
+                <span className="book-mark">MAHMOUD&apos;S WORKSHELF</span>
+              </div>
+              <div className="book-page book-page-right">
+                <button className="book-close" type="button" onClick={() => setSelectedSkill(null)} aria-label="Close book">×</button>
+                <small>FIELD NOTES</small>
+                <p>{skillNotes[selectedSkill]}</p>
+                <span className="book-mark">turn the idea into production →</span>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -292,11 +354,37 @@ function RoomScene({
             <motion.div className="drawer-files" initial={reduceMotion ? false : { opacity: 0, y: 28, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: .94 }}>
               <button className="object-close" type="button" onClick={onClose} aria-label="Close experience drawer">×</button>
               {experience.map((item, index) => (
-                <article className={`drawer-file drawer-file-${index + 1}`} key={item.title}>
-                  <small>0{index + 1}</small><strong>{item.title}</strong><p>{item.copy}</p>
-                </article>
+                <button
+                  type="button"
+                  className={`drawer-file drawer-file-${index + 1}`}
+                  key={item.title}
+                  onClick={() => setSelectedExperience(index)}
+                  aria-label={`Open experience file: ${item.title}`}
+                >
+                  <small>CASE FILE / 0{index + 1}</small>
+                  <strong>{item.title}</strong>
+                </button>
               ))}
             </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {active === "experience" && selectedExperienceItem && (
+            <motion.article
+              key={selectedExperienceItem.title}
+              className="drawer-document"
+              initial={reduceMotion ? false : { opacity: 0, y: 70, rotate: -7, scale: .75 }}
+              animate={{ opacity: 1, y: 0, rotate: -1, scale: 1 }}
+              exit={{ opacity: 0, y: 45, rotate: -5, scale: .86 }}
+              transition={{ duration: .36, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <button className="drawer-document-close" type="button" onClick={() => setSelectedExperience(null)} aria-label="Put file back">×</button>
+              <small>PERSONNEL ARCHIVE / {String(selectedExperience + 1).padStart(2, "0")}</small>
+              <h3>{selectedExperienceItem.title}</h3>
+              <p>{selectedExperienceItem.copy}</p>
+              <span className="file-stamp">PRODUCTION EXPERIENCE</span>
+            </motion.article>
           )}
         </AnimatePresence>
       </div>
