@@ -1,0 +1,78 @@
+:root {
+  --ink: #eaf2ed;
+  --muted: #92a29b;
+  --deep: #07100d;
+  --panel: #0d1915;
+  --panel-2: #13221c;
+  --line: rgba(219, 238, 227, 0.14);
+  --lime: #b9f27c;
+  --lime-soft: rgba(185, 242, 124, 0.14);
+  --amber: #f0be68;
+  --wood: #503c2d;
+  --wood-2: #33271f;
+  --paper: #dfd2b5;
+  --danger: #ff8f78;
+  --radius: 24px;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--deep); color-scheme: dark; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(185, 242, 124, 0.08), transparent 34rem),
+    var(--deep);
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+button, a { font: inherit; }
+button { color: inherit; }
+button:focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
+::selection { background: var(--lime); color: var(--deep); }
+
+.kicker {
+  color: var(--lime);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  margin: 0 0 0.9rem;
+  text-transform: uppercase;
+}
+
+.entry-scene {
+  min-height: 100svh;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(420px, 1.28fr);
+  align-items: center;
+  gap: 3vw;
+  padding: clamp(28px, 5vw, 72px);
+  background:
+    linear-gradient(180deg, #081513 0%, #0b1814 48%, #08100e 100%);
+}
+.entry-stars { position: absolute; inset: 0; opacity: .75; pointer-events: none; background-image: radial-gradient(circle, rgba(234,242,237,.65) 0 1px, transparent 1.2px); background-size: 91px 91px; background-position: 5px 11px; mask-image: linear-gradient(to bottom, #000, transparent 70%); }
+.entry-copy { max-width: 590px; position: relative; z-index: 2; }
+.entry-copy h1 { font-size: clamp(3rem, 8vw, 7.5rem); letter-spacing: -0.065em; line-height: .82; margin: 0; font-weight: 650; }
+.entry-role { font-size: clamp(1.15rem, 2.1vw, 1.75rem); margin: 1.8rem 0 .5rem; color: #d2ded8; }
+.entry-tagline { color: var(--muted); max-width: 38rem; font-size: 1.05rem; line-height: 1.65; }
+.entry-actions { position: absolute; left: clamp(28px, 5vw, 72px); bottom: clamp(28px, 5vw, 64px); z-index: 3; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.primary-action { background: var(--lime); color: #111912; border: 0; border-radius: 999px; padding: .95rem 1.25rem; font-weight: 700; cursor: pointer; }
+.primary-action:hover { transform: translateY(-2px); }
+.text-action { background: transparent; border: 0; color: var(--muted); cursor: pointer; padding: .8rem .25rem; }
+.text-action:hover { color: var(--ink); }
+
+.house-wrap { min-height: 64vh; position: relative; display: grid; place-items: center; perspective: 1000px; z-index: 1; }
+.moon { position: absolute; top: 3%; right: 12%; width: 88px; aspect-ratio: 1; border-radius: 50%; background: #dce5c8; box-shadow: 0 0 80px rgba(220,229,200,.14); }
+.house { position: relative; width: min(88%, 720px); height: 430px; background: #17241f; border: 1px solid rgba(230,242,235,.12); box-shadow: 0 45px 80px rgba(0,0,0,.34); transform: rotateY(-6deg); }
+.roof { position: absolute; left: -9%; top: -123px; width: 118%; height: 128px; background: #111d19; clip-path: polygon(12% 100%, 50% 0, 88% 100%); }
+.window { position: absolute; top: 105px; width: 126px; height: 150px; background: rgba(240,190,104,.7); box-shadow: 0 0 50px rgba(240,190,104,.12); border: 12px solid #26352f; }
+.window::before, .window::after { content: ""; position: absolute; background: #26352f; }
+.window::before { width: 8px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
+.window::after { height: 8px; width: 100%; top: 50%; left: 0; transform: translateY(-50%); }
+.window-left { left: 12%; } .window-right { right: 12%; }
+.front-door { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 116px; height: 208px; border: 1px solid rgba(255,255,255,.16); background: #263228; cursor: pointer; overflow: hidden; transition: filter .2s ease, transform .2s ease; }
+.front-door:hover { filter: brightness(1.18); transform: translateX(-50%) translateY(-3px); }
+.door-light { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(240,190,104,.42)); opacity: .45; }
+.door-label { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); font-size: .68rem; letter-spacing: .2em; color: var(--amber); }
+.ground-line { position: absolute; left: 0; right: 0; bottom: 16%; height: 1px; background: rgba(255,255,255,.12); }
