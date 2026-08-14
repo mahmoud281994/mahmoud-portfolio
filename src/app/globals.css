@@ -6,3 +6,5 @@
 @import "./styles/panels.css";
 @import "./styles/responsive.css";
 @import "./styles/immersive-room.css";
+
+.immersive-topbar .brand-button .brand-mark { display: grid !important; }
