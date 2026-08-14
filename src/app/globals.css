@@ -7,5 +7,6 @@
 @import "./styles/responsive.css";
 @import "./styles/immersive-room.css";
 @import "./styles/cinematic-workstation.css";
+@import "./styles/object-reading.css";
 
 .immersive-topbar .brand-button .brand-mark { display: grid !important; }
