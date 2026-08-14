@@ -1,0 +1,41 @@
+@media (max-width: 1080px) {
+  .entry-scene { grid-template-columns: 1fr; padding-bottom: 120px; }
+  .entry-copy { align-self: end; margin-top: 50px; }
+  .house-wrap { min-height: 48vh; }
+  .house { height: 330px; width: min(82%, 600px); }
+  .roof { top: -96px; height: 100px; }
+  .window { width: 100px; height: 120px; top: 80px; }
+  .front-door { height: 162px; width: 94px; }
+  .explore-layout { grid-template-columns: 1fr; height: auto; min-height: calc(100svh - 82px); }
+  .room-copy { max-width: 720px; }
+  .room-stage { max-height: none; min-height: 520px; }
+}
+
+@media (max-width: 720px) {
+  .entry-scene { padding: 24px 20px 130px; }
+  .entry-copy h1 { font-size: clamp(3.5rem, 19vw, 6rem); }
+  .house-wrap { min-height: 390px; }
+  .house { height: 250px; width: 92%; }
+  .roof { top: -73px; height: 76px; }
+  .window { width: 70px; height: 88px; border-width: 8px; top: 62px; }
+  .front-door { width: 72px; height: 126px; }
+  .moon { width: 58px; }
+  .entry-actions { left: 20px; right: 20px; bottom: 24px; align-items:flex-start; flex-direction:column; }
+  .topbar { padding: 0 16px; height: 72px; }
+  .brand-button small { display:none; }
+  .brand-mark { width: 34px; }
+  .mode-switch button { padding: .48rem .7rem; }
+  .explore-layout { padding: 34px 16px 48px; gap: 30px; }
+  .room-copy h1 { font-size: clamp(2.8rem, 13vw, 4.5rem); }
+  .room-stage { min-height: 0; aspect-ratio: .92 / 1; border-radius: 22px; }
+  .room-wall-left { width: 70%; }.room-wall-right{width:58%}
+  .window-scene{left:6%;top:7%;width:26%;height:24%;border-width:6px}.wall-board{left:38%;top:8%;width:28%;height:19%;border-width:5px}.bookshelf{left:4%;bottom:21%;width:21%;height:32%;border-width:5px}.cabinet{right:3%;bottom:21%;width:20%;height:29%;border-width:5px}.desk{left:22%;right:12%;bottom:28%;height:21%}.monitor{left:39%;bottom:49%;width:32%;height:25%}.keyboard{left:40%;bottom:44%;width:32%}.mug{left:74%;bottom:47%;width:5.5%}.phone{right:18%;bottom:44%;width:5%}.chair{left:46%;bottom:8%;width:22%;height:32%}.plant{right:0%;bottom:12%;width:13%;height:22%}
+  .hotspot-laptop{left:54%;bottom:58%}.hotspot-books{left:12%;bottom:49%}.hotspot-drawer{left:31%;bottom:38%}.hotspot-board{left:51%;top:13%}.hotspot-phone{right:16%;bottom:46%}
+  .hotspot-tooltip{display:none}.hotspot{width:40px}.hotspot-ring{inset:10px}
+  .room-caption{font-size:.52rem}
+  .panel-head{padding:20px}.panel-scroll{padding:20px}.skills-grid{grid-template-columns:1fr}.case-file{grid-template-columns:34px 1fr auto;padding:16px}.case-study dl div{grid-template-columns:1fr;gap:7px}.quick-view{padding-top:55px}.quick-hero{margin-bottom:72px}.quick-hero h1{font-size:clamp(4rem,20vw,7rem)}.quick-projects{grid-template-columns:1fr}.quick-project{min-height:250px}.quick-two-col{grid-template-columns:1fr;gap:44px}.modal-backdrop{padding:8px}.project-modal{border-radius:18px;max-height:94vh;padding:28px 20px}.modal-close{right:12px;top:12px}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
