@@ -11,5 +11,6 @@
 @import "./styles/room-life.css";
 @import "./styles/room-easter-eggs.css";
 @import "./styles/world-expansion.css";
+@import "./styles/world-expansion-polish.css";
 
 .immersive-topbar .brand-button .brand-mark { display: grid !important; }
