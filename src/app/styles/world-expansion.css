@@ -1,0 +1,178 @@
+body:has(.immersive-room) .room-side-door-portal { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.room-side-door-portal {
+  position: fixed;
+  right: 1.8vw;
+  bottom: 16vh;
+  width: clamp(56px, 5.8vw, 88px);
+  height: clamp(126px, 22vh, 210px);
+  z-index: 64;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity .3s ease, transform .3s ease;
+  cursor: pointer;
+}
+.side-door-frame {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border: 7px solid #18211d;
+  border-bottom-width: 10px;
+  background: linear-gradient(100deg,#26362f,#192820 58%,#0e1713);
+  box-shadow: -16px 20px 38px rgba(0,0,0,.38), inset -14px 0 24px rgba(0,0,0,.25);
+  transform-origin: left center;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .25s;
+}
+.room-side-door-portal:hover .side-door-frame,
+.room-side-door-portal:focus-visible .side-door-frame { transform: perspective(420px) rotateY(-8deg); filter: brightness(1.12); }
+.side-door-window { position:absolute; left:20%; right:20%; top:11%; height:26%; background:linear-gradient(#142a31,#234344); border:4px solid #0e1714; box-shadow:inset 0 0 18px rgba(86,186,181,.12); }
+.side-door-window::after { content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; background:#0d1714; }
+.side-door-handle { position:absolute; right:14%; top:53%; width:8px; height:8px; border-radius:50%; background:#b69d6b; box-shadow:0 0 0 3px rgba(0,0,0,.18); }
+.side-door-light { position:absolute; left:50%; top:-18px; width:20px; height:8px; transform:translateX(-50%); background:#e7bc67; border-radius:50%; box-shadow:0 0 22px 8px rgba(231,188,103,.28); }
+.side-door-hint { position:absolute; right:100%; top:46%; margin-right:10px; white-space:nowrap; color:#c9d7ce; font:700 .58rem ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.16em; opacity:0; transform:translateX(6px); transition:.2s ease; }
+.room-side-door-portal:hover .side-door-hint,.room-side-door-portal:focus-visible .side-door-hint { opacity:.8; transform:translateX(0); }
+
+.corridor-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  overflow: hidden;
+  background:#0a100e;
+  perspective:900px;
+  isolation:isolate;
+}
+.corridor-wall { position:absolute; top:0; bottom:0; width:44%; background:linear-gradient(180deg,#1d2924,#101815); }
+.corridor-wall-left { left:0; clip-path:polygon(0 0,100% 18%,100% 82%,0 100%); }
+.corridor-wall-right { right:0; clip-path:polygon(0 18%,100% 0,100% 100%,0 82%); }
+.corridor-ceiling { position:absolute; left:26%; right:26%; top:0; height:22%; background:linear-gradient(#0b110f,#18231f); clip-path:polygon(0 0,100% 0,78% 100%,22% 100%); }
+.corridor-floor { position:absolute; left:17%; right:17%; bottom:0; height:42%; background:linear-gradient(180deg,#33271d,#17120f); clip-path:polygon(31% 0,69% 0,100% 100%,0 100%); }
+.corridor-floor i { position:absolute; left:8%; right:8%; height:1px; background:rgba(255,255,255,.08); bottom:calc(var(--i,0) * 13%); }
+.corridor-floor i:nth-child(1){--i:1}.corridor-floor i:nth-child(2){--i:2}.corridor-floor i:nth-child(3){--i:3}.corridor-floor i:nth-child(4){--i:4}.corridor-floor i:nth-child(5){--i:5}.corridor-floor i:nth-child(6){--i:6}.corridor-floor i:nth-child(7){--i:7}
+.corridor-lamps i { position:absolute; top:13%; width:18px; height:7px; background:#f0c570; border-radius:50%; box-shadow:0 0 28px 12px rgba(240,197,112,.18); animation:corridor-lamp 1.1s ease-in-out infinite alternate; }
+.corridor-lamps i:nth-child(1){left:35%}.corridor-lamps i:nth-child(2){left:50%;animation-delay:.15s}.corridor-lamps i:nth-child(3){right:35%;animation-delay:.3s}
+@keyframes corridor-lamp { to { filter:brightness(1.18); box-shadow:0 0 34px 15px rgba(240,197,112,.23); } }
+.corridor-stairs { position:absolute; left:39%; right:39%; bottom:8%; height:42%; transform:perspective(520px) rotateX(54deg); transform-origin:bottom center; }
+.corridor-stairs i { display:block; height:12%; background:linear-gradient(#46362a,#261d17); border-top:2px solid rgba(255,255,255,.08); box-shadow:0 -7px 12px rgba(0,0,0,.18); }
+.corridor-roof-door { position:absolute; left:43%; right:43%; top:16%; height:38%; border:8px solid #111a16; background:linear-gradient(#26382f,#14201b); box-shadow:0 0 50px rgba(230,193,112,.08); animation:corridor-door-push .92s cubic-bezier(.2,.8,.2,1) forwards; }
+.corridor-roof-door span { position:absolute; inset:14%; background:#0d1714; border:3px solid #344940; }
+@keyframes corridor-door-push { 0%{transform:scale(.58);filter:brightness(.55)} 75%{transform:scale(1.35);filter:brightness(1.15)} 100%{transform:scale(2.2);filter:brightness(1.7);opacity:.12} }
+.corridor-transition.is-returning .corridor-roof-door { animation-direction:reverse; }
+.corridor-camera-glow { position:absolute; inset:0; background:radial-gradient(circle at 50% 39%,rgba(245,211,136,.18),transparent 24%); animation:corridor-glow .92s ease forwards; }
+@keyframes corridor-glow { from{opacity:.2} to{opacity:.95} }
+
+.rooftop-world {
+  position: fixed;
+  inset: 0;
+  z-index: 170;
+  overflow: hidden;
+  background:#071015;
+  isolation:isolate;
+}
+.roof-sky { position:absolute; inset:0 0 34%; background:linear-gradient(180deg,#050b15 0%,#0b1c25 55%,#193130 100%); }
+.roof-stars { position:absolute; inset:0; opacity:.72; background-image:radial-gradient(circle,#d8e8e3 0 1px,transparent 1.3px); background-size:83px 83px; box-shadow:120px 40px 0 transparent; animation:roof-star-drift 40s linear infinite; }
+@keyframes roof-star-drift { to{transform:translateX(83px)} }
+.roof-moon { position:absolute; right:12%; top:10%; width:clamp(70px,8vw,120px); aspect-ratio:1; border-radius:50%; background:#d8d7bf; box-shadow:0 0 60px rgba(216,215,191,.22); }
+.roof-moon::after { content:""; position:absolute; width:16%; height:12%; border-radius:50%; left:28%; top:24%; background:rgba(90,96,86,.12); box-shadow:24px 29px 0 rgba(90,96,86,.1),-7px 43px 0 rgba(90,96,86,.08); }
+.roof-cloud { position:absolute; height:28px; width:170px; border-radius:50%; background:rgba(99,131,136,.08); filter:blur(8px); animation:cloud-pass 26s linear infinite; }
+.roof-cloud-a{top:23%;left:-15%;}.roof-cloud-b{top:37%;left:-32%;width:240px;animation-duration:38s;animation-delay:6s}@keyframes cloud-pass{to{transform:translateX(130vw)}}
+.roof-plane { position:absolute; top:18%; left:-6%; width:5px; height:5px; border-radius:50%; background:#f3d39a; box-shadow:-12px 0 12px rgba(243,211,154,.5); animation:plane-pass 22s linear infinite; }
+.roof-plane i { position:absolute; left:-65px; top:2px; width:65px; height:1px; background:linear-gradient(90deg,transparent,rgba(240,240,220,.18)); }
+@keyframes plane-pass { to{transform:translate(112vw,18vh)} }
+
+.roof-city { position:absolute; left:-2%; right:-2%; bottom:28%; display:flex; align-items:flex-end; gap:.6vw; pointer-events:none; }
+.roof-city i { --n: var(--b); flex:1; height:calc(65px + (var(--n) % 6) * 18px); min-width:34px; background:#081314; border-top:2px solid rgba(95,147,146,.12); box-shadow:inset 8px 0 0 rgba(255,255,255,.015); position:relative; }
+.roof-city i::after { content:""; position:absolute; inset:12px 8px; background-image:radial-gradient(circle,#d5a85d 0 1.5px,transparent 2px); background-size:18px 19px; opacity:calc(.18 + (var(--n) % 3) * .11); animation:city-window 4s steps(2,end) infinite; animation-delay:calc(var(--n) * -.31s); }
+@keyframes city-window{50%{opacity:.08}}
+.roof-city-back { opacity:.52; filter:blur(.5px); bottom:33%; transform:scale(.94); }
+.roof-city-front { z-index:3; }
+.roof-city-front i { background:#0b1717; height:calc(95px + (var(--n) % 5) * 24px); }
+
+.roof-floor { position:absolute; z-index:7; left:0; right:0; bottom:0; height:33%; background:linear-gradient(165deg,#2b2822,#171a18 62%,#101310); }
+.roof-floor::before { content:""; position:absolute; inset:0; background:repeating-linear-gradient(93deg,transparent 0 110px,rgba(255,255,255,.025) 111px 112px); }
+.roof-parapet { position:absolute; z-index:8; left:0; right:0; bottom:28%; height:9%; background:linear-gradient(#343631,#1b211e); box-shadow:0 -10px 30px rgba(0,0,0,.24); }
+.roof-parapet span { position:absolute; top:10%; bottom:10%; width:1px; background:rgba(255,255,255,.06); }.roof-parapet span:nth-child(1){left:25%}.roof-parapet span:nth-child(2){left:52%}.roof-parapet span:nth-child(3){left:78%}
+.roof-water-tank { position:absolute; z-index:11; right:8%; bottom:25%; width:9vw; min-width:92px; max-width:145px; height:21vh; border-radius:22px 22px 10px 10px; background:linear-gradient(90deg,#192621,#2d3c34 46%,#15201c); box-shadow:10px 18px 32px rgba(0,0,0,.3); }
+.roof-water-tank::before { content:""; position:absolute; left:-7%; right:-7%; top:5%; height:4%; border-radius:50%; background:#3a4a40; }
+.roof-water-tank i { position:absolute; left:18%; right:18%; top:28%; height:2px; background:rgba(255,255,255,.08); box-shadow:0 27px 0 rgba(255,255,255,.05),0 54px 0 rgba(255,255,255,.04); }
+.roof-water-tank span { position:absolute; left:46%; top:-17%; width:8%; height:18%; background:#1b2823; }
+.roof-antenna { position:absolute; z-index:10; left:17%; bottom:28%; width:75px; height:37vh; }
+.roof-antenna span { position:absolute; left:50%; bottom:0; width:3px; height:100%; background:#38433d; transform:translateX(-50%); }
+.roof-antenna i { position:absolute; left:14%; right:14%; height:2px; background:#4d5b53; transform-origin:center; }.roof-antenna i:nth-child(1){top:26%;transform:rotate(12deg)}.roof-antenna i:nth-child(2){top:43%;transform:rotate(-9deg)}
+.roof-ac { position:absolute; z-index:11; bottom:8%; width:10vw; min-width:100px; max-width:150px; height:9vh; min-height:65px; background:#383c37; border:5px solid #1f2421; box-shadow:10px 14px 25px rgba(0,0,0,.25); }
+.roof-ac i { position:absolute; left:12%; top:20%; width:42%; aspect-ratio:1; border:4px solid #222824; border-radius:50%; }
+.roof-ac i::before,.roof-ac i::after{content:"";position:absolute;left:48%;top:8%;bottom:8%;width:3px;background:#222824}.roof-ac i::after{transform:rotate(90deg)}
+.roof-ac-a{left:7%}.roof-ac-b{right:27%;transform:scale(.8)}
+.roof-string-lights { position:absolute; z-index:14; left:22%; right:17%; top:18%; height:15%; border-top:1px solid rgba(215,187,119,.28); transform:rotate(2deg); }
+.roof-string-lights i { position:relative; display:inline-block; width:8px; height:8px; margin-left:9%; top:-1px; border-radius:50%; background:#e6bf72; box-shadow:0 0 16px 5px rgba(230,191,114,.17); animation:string-light 2.4s ease-in-out infinite alternate; }
+.roof-string-lights i:nth-child(2n){animation-delay:.5s}.roof-string-lights i:nth-child(3n){animation-delay:1s}@keyframes string-light{to{filter:brightness(.7);box-shadow:0 0 9px 2px rgba(230,191,114,.1)}}
+.roof-bench { position:absolute; z-index:13; left:36%; bottom:9%; width:18vw; min-width:180px; height:11vh; min-height:80px; }
+.roof-bench span { position:absolute; left:0; right:0; top:22%; height:28%; background:#564431; border-radius:5px; box-shadow:0 10px 0 #3e3024; }
+.roof-bench i { position:absolute; bottom:0; width:8px; height:50%; background:#272b28; }.roof-bench i:nth-child(2){left:14%}.roof-bench i:nth-child(3){right:14%}
+
+.roof-return-door { position:absolute; z-index:20; left:3%; bottom:5%; width:80px; height:150px; border:7px solid #111814; background:linear-gradient(100deg,#26352e,#14211b); cursor:pointer; box-shadow:12px 18px 30px rgba(0,0,0,.3); }
+.roof-return-light { position:absolute; left:50%; top:-20px; width:22px; height:8px; border-radius:50%; background:#e9c16d; transform:translateX(-50%); box-shadow:0 0 22px 8px rgba(233,193,109,.2); }
+.roof-return-label { color:#d5dfd8; font:800 1rem ui-monospace,SFMono-Regular,Menlo,monospace; }
+
+.roof-telescope { position:absolute; z-index:18; left:58%; bottom:12%; width:140px; height:170px; }
+.telescope-body { position:absolute; left:18px; top:18px; width:98px; height:28px; border-radius:18px 8px 8px 18px; background:linear-gradient(#59645d,#303934); transform:rotate(-22deg); box-shadow:8px 10px 20px rgba(0,0,0,.3); }
+.telescope-body::before { content:""; position:absolute; left:-11px; top:4px; width:15px; height:20px; background:#222b27; border-radius:8px 0 0 8px; }
+.telescope-body i { position:absolute; right:16px; top:4px; width:22px; height:20px; border-left:4px solid #1c2421; }
+.telescope-body b { position:absolute; left:52%; top:26px; width:5px; height:112px; background:#333c37; transform:rotate(18deg); transform-origin:top; box-shadow:40px 10px 0 #333c37; }
+.roof-telescope > button { position:absolute; inset:0; border:0; background:transparent; cursor:pointer; }
+.roof-telescope::after { content:"LOOK"; position:absolute; left:18%; bottom:-6px; color:#9fb5aa; font:700 .58rem ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.16em; opacity:0; transition:.2s; }
+.roof-telescope:hover::after,.roof-telescope:focus-within::after{opacity:.8}
+.roof-telescope.is-looking .telescope-body { filter:drop-shadow(0 0 12px rgba(134,215,180,.18)); }
+
+.career-sky-map { position:absolute; z-index:40; left:21%; right:20%; top:9%; bottom:35%; border:1px solid rgba(171,218,199,.12); background:rgba(5,16,20,.72); backdrop-filter:blur(10px); box-shadow:0 24px 80px rgba(0,0,0,.35); }
+.sky-map-close { position:absolute; right:12px; top:10px; z-index:5; border:0; background:transparent; color:#c9ded4; font-size:1.3rem; cursor:pointer; }
+.sky-node { position:absolute; min-width:145px; color:#cfe1d8; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+.sky-node i { display:block; width:10px; height:10px; margin-bottom:8px; border-radius:50%; background:#c6e8d6; box-shadow:0 0 18px 7px rgba(158,221,190,.25); }
+.sky-node strong { display:block; letter-spacing:.13em; font-size:.72rem; }.sky-node small{color:#799389;font-size:.6rem}
+.sky-node-a{left:13%;top:58%}.sky-node-b{left:45%;top:28%}.sky-node-c{right:10%;top:53%}
+.sky-map-line { position:absolute; height:1px; background:linear-gradient(90deg,rgba(183,227,207,.1),rgba(183,227,207,.5),rgba(183,227,207,.1)); transform-origin:left center; }
+.line-a{left:18%;top:63%;width:37%;transform:rotate(-29deg)}.line-b{left:51%;top:34%;width:35%;transform:rotate(24deg)}
+.sky-map-caption { position:absolute; left:6%; bottom:7%; right:6%; color:#7f998e; font:500 .62rem ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.05em; }
+
+.roof-radio { position:absolute; z-index:16; right:10%; bottom:8%; width:95px; height:58px; background:#2e332f; border:5px solid #181d1a; box-shadow:8px 10px 18px rgba(0,0,0,.28); }
+.roof-radio i { position:absolute; left:10px; top:12px; width:28px; height:28px; border:4px solid #171c19; border-radius:50%; }
+.roof-radio button { position:absolute; inset:0; border:0; background:transparent; cursor:pointer; }
+.roof-radio > span { position:absolute; right:0; bottom:112%; width:230px; padding:8px 10px; background:#101815; color:#9cb1a6; font:600 .58rem ui-monospace,SFMono-Regular,Menlo,monospace; box-shadow:0 8px 20px rgba(0,0,0,.24); }
+.roof-radio.is-on { box-shadow:8px 10px 18px rgba(0,0,0,.28),0 0 20px rgba(115,205,163,.08); }
+.roof-cat { position:absolute; z-index:15; left:27%; bottom:29%; width:48px; height:35px; animation:cat-breathe 2.8s ease-in-out infinite alternate; }
+.roof-cat span { position:absolute; left:8px; bottom:0; width:32px; height:22px; background:#111613; border-radius:50% 45% 35% 35%; }
+.roof-cat i { position:absolute; left:4px; top:0; width:17px; height:18px; background:#111613; border-radius:50%; }
+.roof-cat i::before,.roof-cat i::after{content:"";position:absolute;top:-5px;width:7px;height:8px;background:#111613;clip-path:polygon(50% 0,100% 100%,0 100%)}.roof-cat i::before{left:0}.roof-cat i::after{right:0}@keyframes cat-breathe{to{transform:translateY(-2px)}}
+.roof-hint { position:absolute; z-index:20; left:50%; bottom:4%; transform:translateX(-50%); color:rgba(191,208,199,.35); font:600 .55rem ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.2em; text-transform:uppercase; }
+
+@media (max-width: 720px) {
+  .room-side-door-portal { right:8px; bottom:12vh; width:50px; height:112px; }
+  .side-door-frame { border-width:5px; }
+  .side-door-hint { display:none; }
+  .corridor-wall { width:48%; }
+  .corridor-roof-door { left:36%; right:36%; }
+  .corridor-stairs { left:31%; right:31%; }
+  .roof-city { gap:2px; }
+  .roof-city i { min-width:22px; }
+  .roof-water-tank { right:3%; min-width:75px; height:16vh; }
+  .roof-antenna { left:8%; height:31vh; transform:scale(.75); transform-origin:bottom; }
+  .roof-ac-b { display:none; }
+  .roof-ac-a { left:5%; min-width:78px; width:90px; }
+  .roof-bench { left:34%; min-width:125px; width:130px; }
+  .roof-return-door { width:58px; height:112px; left:2%; bottom:4%; border-width:5px; }
+  .roof-telescope { left:53%; bottom:14%; transform:scale(.78); transform-origin:bottom left; }
+  .roof-radio { right:4%; bottom:5%; transform:scale(.8); transform-origin:bottom right; }
+  .roof-string-lights { left:12%; right:5%; top:15%; }
+  .career-sky-map { left:5%; right:5%; top:8%; bottom:34%; }
+  .sky-node { min-width:100px; }
+  .sky-node strong { font-size:.6rem; }.sky-node small{font-size:.5rem}
+  .sky-node-a{left:7%;top:60%}.sky-node-b{left:38%;top:25%}.sky-node-c{right:4%;top:55%}
+  .sky-map-caption { font-size:.52rem; }
+  .roof-cat { left:21%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .corridor-roof-door,.corridor-camera-glow,.roof-stars,.roof-cloud,.roof-plane,.roof-string-lights i,.roof-cat { animation:none!important; }
+}
