@@ -370,7 +370,7 @@ function RoomScene({
         </AnimatePresence>
 
         <AnimatePresence>
-          {active === "experience" && selectedExperienceItem && (
+          {active === "experience" && selectedExperience !== null && selectedExperienceItem && (
             <motion.article
               key={selectedExperienceItem.title}
               className="drawer-document"
