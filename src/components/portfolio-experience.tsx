@@ -18,6 +18,7 @@ const hotspots: Record<HotspotId, { title: string; hint: string }> = {
 export function PortfolioExperience() {
   const reduceMotion = useReducedMotion();
   const [entered, setEntered] = useState(false);
+  const [entering, setEntering] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("explore");
   const [active, setActive] = useState<HotspotId | null>(null);
   const [project, setProject] = useState<Project | null>(null);
@@ -41,9 +42,18 @@ export function PortfolioExperience() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [active]);
 
+  const enterHouse = () => {
+    if (doorState !== "invited" || entering) return;
+    setEntering(true);
+    window.setTimeout(() => {
+      setEntered(true);
+      setEntering(false);
+    }, reduceMotion ? 90 : 1050);
+  };
+
   if (!entered) {
     return (
-      <main className="entry-scene">
+      <main className={`entry-scene ${entering ? "is-entering-house" : ""}`}>
         <div className="entry-stars" aria-hidden="true" />
         <div className="entry-copy">
           <p className="kicker">PORTFOLIO / 2026</p>
@@ -63,12 +73,12 @@ export function PortfolioExperience() {
             <div className="window window-right invitation-window">
               <span />
               <AnimatePresence>
-                {doorState === "invited" && (
+                {doorState === "invited" && !entering && (
                   <motion.div
                     className="window-message"
                     initial={reduceMotion ? false : { opacity: 0, y: 8, scale: .92 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
                     transition={{ duration: .28 }}
                     role="status"
                   >
@@ -86,7 +96,7 @@ export function PortfolioExperience() {
               className="doorbell"
               type="button"
               onClick={() => setDoorState("ringing")}
-              disabled={doorState !== "idle"}
+              disabled={doorState !== "idle" || entering}
               aria-label={doorState === "idle" ? "Ring the doorbell" : "Doorbell rung"}
             >
               <span className="doorbell-led" />
@@ -95,18 +105,35 @@ export function PortfolioExperience() {
             </button>
 
             <button
-              className="front-door"
+              className={`front-door ${entering ? "is-opening" : ""}`}
               type="button"
-              onClick={() => doorState === "invited" && setEntered(true)}
-              disabled={doorState !== "invited"}
+              onClick={enterHouse}
+              disabled={doorState !== "invited" || entering}
               aria-label={doorState === "invited" ? "Enter the house" : "Ring the doorbell first"}
             >
+              <span className="door-interior" aria-hidden="true" />
               <span className="door-light" />
-              <span className="door-label">{doorState === "invited" ? "ENTER" : ""}</span>
+              <span className="door-label">{doorState === "invited" && !entering ? "ENTER" : ""}</span>
             </button>
           </div>
           <div className="ground-line" />
         </div>
+
+        <AnimatePresence>
+          {entering && (
+            <motion.div
+              className="entry-threshold"
+              initial={reduceMotion ? false : { opacity: 0, scale: .78 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: reduceMotion ? .05 : .92, ease: [0.22, 1, 0.36, 1] }}
+              aria-hidden="true"
+            >
+              <span className="threshold-hall" />
+              <span className="threshold-light" />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="entry-actions">
           <button className="primary-action" type="button" onClick={() => setEntered(true)}>Enter the workspace</button>
@@ -132,7 +159,8 @@ export function PortfolioExperience() {
       </header>
 
       {viewMode === "explore" ? (
-        <section className="immersive-room-layout" aria-label="Interactive developer room">
+        <section className="immersive-room-layout room-arrival" aria-label="Interactive developer room">
+          <div className="arrival-light" aria-hidden="true" />
           <RoomScene
             reduceMotion={Boolean(reduceMotion)}
             active={active}
@@ -200,9 +228,9 @@ function RoomScene({
     <motion.div
       className={`room-stage immersive-room active-${active ?? "none"}`}
       data-active={active ?? "none"}
-      initial={reduceMotion ? false : { opacity: 0, scale: 1.04 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: .8, ease: [0.22, 1, 0.36, 1] }}
+      initial={reduceMotion ? false : { opacity: 0, scale: 1.09, filter: "brightness(.5)" }}
+      animate={{ opacity: 1, scale: 1, filter: "brightness(1)" }}
+      transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
       onPointerMove={handlePointerMove}
       onPointerLeave={(event) => {
         event.currentTarget.style.setProperty("--look-x", "0");
@@ -277,25 +305,81 @@ function RoomScene({
         <div className="monitor-glow" aria-hidden="true" />
         <div className="monitor-screen">
           {active !== "projects" && (
-            <div className="terminal-idle"><span className="terminal-line terminal-line-a" /><span className="terminal-line terminal-line-b" /><span className="terminal-line terminal-line-c" /><strong>&gt; php artisan ship</strong></div>
+            <div className="terminal-idle">
+              <span className="terminal-prompt">mahmoud@home:~$</span>
+              <strong>php artisan ship</strong>
+              <span className="terminal-line terminal-line-a" />
+              <span className="terminal-line terminal-line-b" />
+              <span className="terminal-line terminal-line-c" />
+              <em>✓ systems nominal</em>
+            </div>
           )}
+
           <AnimatePresence mode="wait">
             {active === "projects" && !project && (
-              <motion.div key="project-list" className="monitor-projects" initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <div className="monitor-bar"><span>~/work</span><button type="button" onClick={onClose} aria-label="Close projects">×</button></div>
-                {projects.map((item, index) => (
-                  <button key={item.slug} type="button" className="monitor-project-row" onClick={() => onProject(item)}>
-                    <span>0{index + 1}</span><strong>{item.name}</strong><small>{item.label}</small><b>↗</b>
-                  </button>
-                ))}
+              <motion.div key="desktop" className="workstation-desktop" initial={reduceMotion ? false : { opacity: 0, scale: .97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
+                <div className="desktop-menubar">
+                  <div className="window-dots" aria-hidden="true"><i /><i /><i /></div>
+                  <span>mahmoud@workstation</span>
+                  <time>21:28</time>
+                  <button type="button" onClick={onClose} aria-label="Sleep monitor">×</button>
+                </div>
+
+                <div className="desktop-wallpaper" aria-hidden="true"><span>~/portfolio</span></div>
+
+                <div className="desktop-files" aria-label="Project folders">
+                  {projects.map((item, index) => (
+                    <button key={item.slug} type="button" className="desktop-folder" onClick={() => onProject(item)}>
+                      <span className="folder-icon" aria-hidden="true"><i /></span>
+                      <strong>{item.name}</strong>
+                      <small>{item.label}</small>
+                      <b>0{index + 1}</b>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="desktop-terminal" aria-label="Terminal status">
+                  <div><span>●</span> terminal — zsh</div>
+                  <p><b>$</b> portfolio status</p>
+                  <p className="terminal-success">✓ production mindset</p>
+                  <p className="terminal-success">✓ regression covered</p>
+                  <p><b>$</b> open ./projects/<i className="terminal-caret" /></p>
+                </div>
+
+                <div className="desktop-dock" aria-hidden="true"><i /><i /><i /><i /></div>
               </motion.div>
             )}
+
             {active === "projects" && project && (
-              <motion.div key={project.slug} className="monitor-case" initial={reduceMotion ? false : { opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }}>
-                <div className="monitor-bar"><button type="button" onClick={() => onProject(null)}>← files</button><button type="button" onClick={onClose} aria-label="Close projects">×</button></div>
-                <small>{project.label}</small><h3>{project.name}</h3><p>{project.summary}</p>
-                <div className="monitor-tags">{project.architecture.slice(0, 4).map((item) => <span key={item}>{item}</span>)}</div>
-                <div className="monitor-result"><small>RESULT</small>{project.impact}</div>
+              <motion.div key={project.slug} className="project-workspace" initial={reduceMotion ? false : { opacity: 0, scale: .94, y: 8 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: .96 }}>
+                <div className="project-window-bar">
+                  <div className="window-dots" aria-hidden="true"><i /><i /><i /></div>
+                  <span>projects/{project.slug}/README.md</span>
+                  <div>
+                    <button type="button" onClick={() => onProject(null)}>—</button>
+                    <button type="button" onClick={onClose} aria-label="Close projects">×</button>
+                  </div>
+                </div>
+
+                <div className="project-window-body">
+                  <aside className="project-sidebar" aria-label="Project navigation">
+                    <button type="button" onClick={() => onProject(null)}>← folders</button>
+                    <span className="is-current">README.md</span>
+                    <span>architecture/</span>
+                    <span>tests/</span>
+                    <span>deploy/</span>
+                  </aside>
+
+                  <article className="project-readme">
+                    <small>{project.label}</small>
+                    <h3>{project.name}</h3>
+                    <p className="project-lead">{project.summary}</p>
+                    <section><b>THE PROBLEM</b><p>{project.problem}</p></section>
+                    <section><b>WHAT I BUILT</b><p>{project.build}</p></section>
+                    <section className="readme-result"><b>RESULT</b><p>{project.impact}</p></section>
+                    <div className="monitor-tags">{project.architecture.map((item) => <span key={item}>{item}</span>)}</div>
+                  </article>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -303,8 +387,9 @@ function RoomScene({
         <div className="monitor-neck" /><div className="monitor-base" />
       </div>
 
-      <div className="keyboard room-depth-front" aria-hidden="true" />
+      <div className="keyboard room-depth-front" aria-hidden="true"><span className="keyboard-led" /></div>
       <div className="mug room-depth-front" aria-hidden="true"><span /><i className="steam steam-a" /><i className="steam steam-b" /></div>
+      <div className="desk-clock room-depth-front" aria-hidden="true">21:28</div>
 
       <div className={`phone room-depth-front ${active === "contact" ? "is-open" : ""}`}>
         <span />
