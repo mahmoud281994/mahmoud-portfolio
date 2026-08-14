@@ -1,0 +1,316 @@
+.entry-scene {
+  display: block;
+  min-height: 100svh;
+  padding: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 72% 13%, rgba(255, 224, 172, .08), transparent 20%),
+    linear-gradient(180deg, #071117 0%, #0a151b 46%, #121716 70%, #080c0d 100%);
+  isolation: isolate;
+}
+
+.entry-copy,
+.entry-actions {
+  display: none;
+}
+
+.entry-stars {
+  inset: 0 0 35% 0;
+  opacity: .58;
+  background-image:
+    radial-gradient(circle, rgba(236, 241, 235, .68) 0 1px, transparent 1.3px),
+    radial-gradient(circle, rgba(236, 241, 235, .34) 0 1px, transparent 1.2px);
+  background-size: 112px 112px, 173px 173px;
+  background-position: 18px 11px, 74px 42px;
+  mask-image: linear-gradient(to bottom, #000 0 58%, transparent 100%);
+  z-index: 0;
+}
+
+.house-wrap {
+  position: absolute;
+  inset: 0;
+  min-height: 100svh;
+  display: block;
+  perspective: 1200px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Distant skyline */
+.house-wrap::before {
+  content: "";
+  position: absolute;
+  left: -3%;
+  right: -3%;
+  bottom: 28%;
+  height: 44%;
+  background:
+    linear-gradient(90deg,
+      transparent 0 2%, #111b20 2% 7%, transparent 7% 8%,
+      #0d171c 8% 14%, transparent 14% 15%, #132027 15% 22%, transparent 22% 23%,
+      #0c171c 23% 28%, transparent 28% 29%, #142127 29% 37%, transparent 37% 38%,
+      #0f1c21 38% 44%, transparent 44% 45%, #101b20 45% 52%, transparent 52% 53%,
+      #132128 53% 59%, transparent 59% 60%, #0c171d 60% 66%, transparent 66% 67%,
+      #142027 67% 74%, transparent 74% 75%, #0f191e 75% 81%, transparent 81% 82%,
+      #152229 82% 91%, transparent 91% 92%, #0d181d 92% 98%, transparent 98% 100%),
+    repeating-linear-gradient(90deg, transparent 0 17px, rgba(236,190,105,.19) 18px 21px, transparent 22px 38px),
+    repeating-linear-gradient(180deg, transparent 0 24px, rgba(236,190,105,.18) 25px 29px, transparent 30px 47px);
+  filter: blur(.1px);
+  opacity: .88;
+  clip-path: polygon(0 19%, 4% 19%, 4% 5%, 8% 5%, 8% 29%, 14% 29%, 14% 11%, 20% 11%, 20% 36%, 27% 36%, 27% 0, 33% 0, 33% 27%, 39% 27%, 39% 13%, 46% 13%, 46% 32%, 54% 32%, 54% 8%, 60% 8%, 60% 23%, 67% 23%, 67% 3%, 73% 3%, 73% 31%, 80% 31%, 80% 16%, 87% 16%, 87% 27%, 93% 27%, 93% 9%, 100% 9%, 100% 100%, 0 100%);
+  z-index: 0;
+}
+
+/* Midground city blocks + glowing windows */
+.house-wrap::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: 19%;
+  height: 33%;
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(8, 15, 18, .98) 0 11%,
+      transparent 11% 12%,
+      rgba(13, 22, 25, .98) 12% 24%,
+      transparent 24% 25%),
+    repeating-linear-gradient(90deg, transparent 0 29px, rgba(240,190,104,.32) 30px 35px, transparent 36px 61px),
+    repeating-linear-gradient(180deg, transparent 0 27px, rgba(240,190,104,.2) 28px 33px, transparent 34px 58px);
+  box-shadow: 0 -20px 70px rgba(0,0,0,.2);
+  opacity: .92;
+  z-index: 1;
+}
+
+.moon {
+  top: 8%;
+  right: 13%;
+  width: clamp(62px, 7vw, 110px);
+  background: #dbe1cb;
+  box-shadow: 0 0 90px rgba(219,225,203,.13);
+  opacity: .9;
+  z-index: 0;
+}
+
+/* Main portfolio townhouse */
+.house {
+  position: absolute;
+  left: 50%;
+  bottom: 19%;
+  width: clamp(260px, 27vw, 430px);
+  height: clamp(300px, 44vh, 470px);
+  transform: translateX(-50%) rotateY(-2deg);
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.025), transparent 12% 86%, rgba(0,0,0,.16)),
+    #18231f;
+  border: 1px solid rgba(230,242,235,.1);
+  box-shadow:
+    0 34px 70px rgba(0,0,0,.48),
+    0 0 0 1px rgba(255,255,255,.018) inset;
+  z-index: 4;
+}
+
+.house::before,
+.house::after {
+  content: "";
+  position: absolute;
+  top: 9%;
+  bottom: 0;
+  width: clamp(145px, 18vw, 270px);
+  z-index: -1;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 24px, rgba(239,190,106,.2) 25px 30px, transparent 31px 49px),
+    repeating-linear-gradient(180deg, transparent 0 28px, rgba(239,190,106,.14) 29px 34px, transparent 35px 55px),
+    #101b1e;
+  border-top: 3px solid rgba(255,255,255,.025);
+}
+
+.house::before {
+  right: 100%;
+  margin-right: clamp(24px, 5vw, 72px);
+  height: 78%;
+  top: auto;
+}
+
+.house::after {
+  left: 100%;
+  margin-left: clamp(28px, 5vw, 76px);
+  height: 91%;
+  top: auto;
+}
+
+.roof {
+  left: -8%;
+  top: clamp(-112px, -11vh, -82px);
+  width: 116%;
+  height: clamp(88px, 12vh, 118px);
+  background: #101a18;
+  filter: drop-shadow(0 16px 22px rgba(0,0,0,.24));
+}
+
+.window {
+  top: 24%;
+  width: clamp(66px, 7vw, 105px);
+  height: clamp(88px, 12vh, 128px);
+  border-width: 8px;
+  background: rgba(240,190,104,.58);
+  box-shadow:
+    0 0 34px rgba(240,190,104,.1),
+    inset 0 0 22px rgba(255,228,173,.1);
+}
+
+.window-left { left: 10%; }
+.window-right { right: 10%; }
+
+.front-door {
+  width: clamp(76px, 7.8vw, 108px);
+  height: clamp(140px, 20vh, 198px);
+  background: #26342c;
+  box-shadow: 0 -18px 42px rgba(240,190,104,.04);
+}
+
+.front-door::before {
+  content: "";
+  position: absolute;
+  top: 16%;
+  left: 14%;
+  width: 72%;
+  height: 30%;
+  border: 1px solid rgba(240,190,104,.18);
+  background: rgba(240,190,104,.035);
+}
+
+.front-door::after {
+  content: "";
+  position: absolute;
+  right: 12%;
+  top: 54%;
+  width: 5px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #e6b961;
+  box-shadow: 0 0 10px rgba(230,185,97,.28);
+}
+
+.door-label {
+  bottom: 12px;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  opacity: .72;
+}
+
+/* Street / pavement */
+.ground-line {
+  left: -5%;
+  right: -5%;
+  bottom: 0;
+  height: 19%;
+  background:
+    linear-gradient(180deg, #242927 0 12%, #151a1a 12% 28%, #0d1112 28% 100%);
+  border: 0;
+  z-index: 6;
+  overflow: hidden;
+}
+
+.ground-line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 13%;
+  height: 2px;
+  background: rgba(226,235,229,.14);
+  box-shadow: 0 12px 0 rgba(0,0,0,.24);
+}
+
+.ground-line::after {
+  content: "";
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  top: 58%;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, transparent 0 7vw, rgba(224,215,166,.38) 7vw 12vw, transparent 12vw 19vw);
+  transform: perspective(400px) rotateX(56deg);
+  opacity: .75;
+}
+
+/* Streetlights and atmosphere created from layered shadows */
+.entry-scene::before {
+  content: "";
+  position: absolute;
+  left: 9%;
+  bottom: 18%;
+  width: 4px;
+  height: 23%;
+  background: #1d2525;
+  border-radius: 999px;
+  z-index: 7;
+  box-shadow:
+    27vw 0 0 #1d2525,
+    55vw 0 0 #1d2525,
+    78vw 0 0 #1d2525;
+}
+
+.entry-scene::after {
+  content: "";
+  position: absolute;
+  left: calc(9% - 10px);
+  bottom: calc(41% - 6px);
+  width: 24px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d7b66e;
+  box-shadow:
+    0 0 22px rgba(235,194,111,.22),
+    27vw 0 0 #d7b66e,
+    27vw 0 22px rgba(235,194,111,.2),
+    55vw 0 0 #d7b66e,
+    55vw 0 22px rgba(235,194,111,.2),
+    78vw 0 0 #d7b66e,
+    78vw 0 22px rgba(235,194,111,.2);
+  z-index: 8;
+}
+
+.front-door {
+  animation: city-door-breathe 3.6s ease-in-out infinite;
+}
+
+@keyframes city-door-breathe {
+  0%, 100% { box-shadow: 0 -18px 42px rgba(240,190,104,.03); }
+  50% { box-shadow: 0 -20px 55px rgba(240,190,104,.11); }
+}
+
+@media (max-width: 760px) {
+  .house-wrap::before { bottom: 31%; height: 38%; opacity: .72; }
+  .house-wrap::after { bottom: 20%; height: 28%; }
+  .house {
+    width: min(62vw, 300px);
+    height: min(46vh, 380px);
+    bottom: 20%;
+  }
+  .house::before { width: 26vw; margin-right: 4vw; }
+  .house::after { width: 26vw; margin-left: 4vw; }
+  .moon { right: 8%; top: 7%; }
+  .ground-line { height: 20%; }
+  .entry-scene::before,
+  .entry-scene::after { opacity: .7; }
+}
+
+@media (max-width: 480px) {
+  .house {
+    width: 68vw;
+    height: 42vh;
+  }
+  .house::before,
+  .house::after { opacity: .75; }
+  .window { width: 18%; height: 26%; }
+  .front-door { width: 25%; height: 43%; }
+  .door-label { font-size: .5rem; }
+  .entry-scene::before,
+  .entry-scene::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .front-door { animation: none; }
+}
