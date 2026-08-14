@@ -6,6 +6,7 @@ import { experience, profile, projects, skills, type Project } from "@/data/port
 
 type HotspotId = "projects" | "skills" | "experience" | "about" | "contact";
 type ViewMode = "explore" | "quick";
+type BoardNoteId = "api" | "ship" | "years";
 
 const hotspots: Record<HotspotId, { title: string; hint: string }> = {
   projects: { title: "Projects", hint: "Wake the monitor" },
@@ -28,6 +29,24 @@ const skillNotes: Record<string, string> = {
   Testing: "Targeted regression tests around the failure mode, not tests for decoration. The goal is to stop the same bug coming back.",
   Git: "Small reviewable changes, clean history when it matters, and safe promotion between branches without dragging unrelated work along.",
   "Production debugging": "Reproduce the real failure, follow the data, find the narrowest root cause, then change as little as possible.",
+};
+
+const boardNotes: Record<BoardNoteId, { label: string; title: string; copy: string }> = {
+  api: {
+    label: "API FIRST",
+    title: "Build the contract before the noise.",
+    copy: "I like backend boundaries to be explicit: validation, authorization, domain rules, response shapes and failure states should be understandable before the UI depends on them.",
+  },
+  ship: {
+    label: "SHIP SAFE",
+    title: "Narrow changes. Real regression coverage.",
+    copy: "Production work is less about writing the most code and more about finding the actual failure mode, changing the smallest correct surface, and proving the old behavior stays intact.",
+  },
+  years: {
+    label: "8+ YEARS",
+    title: "Most of the value is pattern recognition.",
+    copy: "Years in backend work compound into faster diagnosis: knowing where data leaks across scopes, where payment state lies, where retries hurt, and where a harmless-looking query becomes a production incident.",
+  },
 };
 
 export function PortfolioExperience() {
@@ -219,11 +238,22 @@ function RoomScene({
 }) {
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [selectedExperience, setSelectedExperience] = useState<number | null>(null);
+  const [selectedBoardNote, setSelectedBoardNote] = useState<BoardNoteId | null>(null);
+  const [lampOn, setLampOn] = useState(true);
+  const [lampClicks, setLampClicks] = useState(0);
+  const [mugJoke, setMugJoke] = useState(false);
 
   useEffect(() => {
     if (active !== "skills") setSelectedSkill(null);
     if (active !== "experience") setSelectedExperience(null);
+    if (active !== "about") setSelectedBoardNote(null);
   }, [active]);
+
+  useEffect(() => {
+    if (!mugJoke) return;
+    const timer = window.setTimeout(() => setMugJoke(false), 2200);
+    return () => window.clearTimeout(timer);
+  }, [mugJoke]);
 
   const button = (id: HotspotId, className: string, label: string) => (
     <button
@@ -248,10 +278,16 @@ function RoomScene({
   };
 
   const selectedExperienceItem = selectedExperience === null ? null : experience[selectedExperience];
+  const selectedBoardNoteItem = selectedBoardNote ? boardNotes[selectedBoardNote] : null;
+
+  const toggleLamp = () => {
+    setLampOn((current) => !current);
+    setLampClicks((count) => count + 1);
+  };
 
   return (
     <motion.div
-      className={`room-stage immersive-room active-${active ?? "none"}`}
+      className={`room-stage immersive-room active-${active ?? "none"} ${lampOn ? "lamp-on" : "lamp-off"}`}
       data-active={active ?? "none"}
       initial={reduceMotion ? false : { opacity: 0, scale: 1.09, filter: "brightness(.5)" }}
       animate={{ opacity: 1, scale: 1, filter: "brightness(1)" }}
@@ -282,12 +318,47 @@ function RoomScene({
         <div className="board-paper paper-c">8+<br /><small>YEARS</small></div>
         <AnimatePresence>
           {active === "about" && (
-            <motion.div className="board-story" initial={reduceMotion ? false : { opacity: 0, scale: .9, rotate: -2 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} exit={{ opacity: 0, scale: .94 }}>
+            <motion.div
+              className="board-story is-note-picker"
+              initial={reduceMotion ? false : { opacity: 0, scale: .9, rotate: -2 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              exit={{ opacity: 0, scale: .94 }}
+            >
               <button className="object-close" type="button" onClick={onClose} aria-label="Close about notes">×</button>
-              <p className="board-intro">{profile.intro}</p>
-              <div className="board-note board-note-a"><small>BASE</small><strong>{profile.location}</strong></div>
-              <div className="board-note board-note-b"><small>FOCUS</small><strong>Backend · Architecture · Reliability</strong></div>
-              <div className="board-note board-note-c"><small>MODE</small><strong>Find the root cause.<br />Ship the narrow fix.</strong></div>
+              <div className="board-note-picker">
+                {(Object.keys(boardNotes) as BoardNoteId[]).map((noteId) => (
+                  <button key={noteId} type="button" className="board-note-button" onClick={() => setSelectedBoardNote(noteId)}>
+                    <small>PINNED NOTE</small>
+                    <strong>{boardNotes[noteId].label}</strong>
+                  </button>
+                ))}
+              </div>
+              <AnimatePresence mode="wait">
+                {selectedBoardNote && selectedBoardNoteItem && (
+                  <motion.article
+                    key={selectedBoardNote}
+                    className={`board-note-detail note-${selectedBoardNote}`}
+                    initial={reduceMotion ? false : { opacity: 0, scale: .78, rotate: -3 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: .86 }}
+                    transition={{ duration: .28, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <button type="button" onClick={() => setSelectedBoardNote(null)} aria-label="Pin note back">×</button>
+                    <small>{selectedBoardNoteItem.label} / FIELD NOTE</small>
+                    <h3>{selectedBoardNoteItem.title}</h3>
+                    <p>{selectedBoardNoteItem.copy}</p>
+                    {selectedBoardNote === "api" && <blockquote>Explicit contracts make complicated systems easier to change.</blockquote>}
+                    {selectedBoardNote === "ship" && <blockquote>Find the root cause. Ship the narrow fix. Cover the regression.</blockquote>}
+                    {selectedBoardNote === "years" && (
+                      <div className="board-timeline">
+                        <span>Build systems<br /><b>Laravel · APIs</b></span>
+                        <span>Untangle complexity<br /><b>Payments · Tenancy</b></span>
+                        <span>Ship safely<br /><b>Tests · Production</b></span>
+                      </div>
+                    )}
+                  </motion.article>
+                )}
+              </AnimatePresence>
             </motion.div>
           )}
         </AnimatePresence>
@@ -477,6 +548,14 @@ function RoomScene({
 
       <div className="keyboard room-depth-front" aria-hidden="true"><span className="keyboard-led" /></div>
       <div className="mug room-depth-front" aria-hidden="true"><span /><i className="steam steam-a" /><i className="steam steam-b" /></div>
+      <button className="room-mug-button" type="button" onClick={() => setMugJoke(true)} aria-label="Inspect the mug" />
+      <AnimatePresence>
+        {mugJoke && (
+          <motion.div className="mug-joke" initial={reduceMotion ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} role="status">
+            works on my machine ☕
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="desk-clock room-depth-front" aria-hidden="true">21:28</div>
 
       <div className={`phone room-depth-front ${active === "contact" ? "is-open" : ""}`}>
@@ -499,6 +578,14 @@ function RoomScene({
       <div className="floor-rug room-depth-near" aria-hidden="true" />
       <div className="floor-cable room-depth-front" aria-hidden="true" />
       <div className="lamp room-depth-mid" aria-hidden="true"><i /><span /></div>
+      <button className="room-lamp-button" type="button" onClick={toggleLamp} aria-label={lampOn ? "Turn the lamp off" : "Turn the lamp on"} aria-pressed={lampOn} />
+      <AnimatePresence>
+        {lampClicks >= 3 && lampClicks <= 5 && (
+          <motion.div className="lamp-secret" initial={reduceMotion ? false : { opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} role="status">
+            secret unlocked: ship happens.
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {button("projects", "hotspot-laptop", "Monitor")}
       {button("skills", "hotspot-books", "Bookshelf")}
