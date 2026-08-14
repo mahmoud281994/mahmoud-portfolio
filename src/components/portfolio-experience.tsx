@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { experience, profile, projects, skills, type Project } from "@/data/portfolio";
 
 type HotspotId = "projects" | "skills" | "experience" | "about" | "contact";
@@ -21,6 +21,14 @@ export function PortfolioExperience() {
   const [viewMode, setViewMode] = useState<ViewMode>("explore");
   const [active, setActive] = useState<HotspotId | null>(null);
   const [project, setProject] = useState<Project | null>(null);
+  const [doorState, setDoorState] = useState<"idle" | "ringing" | "invited">("idle");
+
+  useEffect(() => {
+    if (doorState !== "ringing") return;
+
+    const timer = window.setTimeout(() => setDoorState("invited"), reduceMotion ? 80 : 650);
+    return () => window.clearTimeout(timer);
+  }, [doorState, reduceMotion]);
 
   const progress = useMemo(() => (active ? 1 : 0), [active]);
 
@@ -35,15 +43,57 @@ export function PortfolioExperience() {
           <p className="entry-tagline">{profile.tagline}</p>
         </div>
 
-        <div className="house-wrap" aria-label="A stylized developer house at night">
+        <div className={`house-wrap door-${doorState}`} aria-label="A developer townhouse at night">
           <div className="moon" />
           <div className="house">
             <div className="roof" />
+            <div className="house-trim" aria-hidden="true" />
+            <div className="house-number" aria-hidden="true">28</div>
+            <div className="porch-light" aria-hidden="true"><span /></div>
             <div className="window window-left"><span /></div>
-            <div className="window window-right"><span /></div>
-            <button className="front-door" type="button" onClick={() => setEntered(true)}>
+            <div className="window window-right invitation-window">
+              <span />
+              <AnimatePresence>
+                {doorState === "invited" && (
+                  <motion.div
+                    className="window-message"
+                    initial={reduceMotion ? false : { opacity: 0, y: 8, scale: .92 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: .28 }}
+                    role="status"
+                  >
+                    ادخل يا حبب
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div className="porch-planter porch-planter-left" aria-hidden="true"><i /><i /><i /></div>
+            <div className="porch-planter porch-planter-right" aria-hidden="true"><i /><i /><i /></div>
+            <div className="porch-steps" aria-hidden="true"><span /><span /><span /></div>
+
+            <button
+              className="doorbell"
+              type="button"
+              onClick={() => setDoorState("ringing")}
+              disabled={doorState !== "idle"}
+              aria-label={doorState === "idle" ? "Ring the doorbell" : "Doorbell rung"}
+            >
+              <span className="doorbell-led" />
+              <span className="doorbell-button" />
+              <span className="doorbell-hint">RING</span>
+            </button>
+
+            <button
+              className="front-door"
+              type="button"
+              onClick={() => doorState === "invited" && setEntered(true)}
+              disabled={doorState !== "invited"}
+              aria-label={doorState === "invited" ? "Enter the house" : "Ring the doorbell first"}
+            >
               <span className="door-light" />
-              <span className="door-label">ENTER</span>
+              <span className="door-label">{doorState === "invited" ? "ENTER" : ""}</span>
             </button>
           </div>
           <div className="ground-line" />
@@ -71,7 +121,7 @@ export function PortfolioExperience() {
   return (
     <main className="portfolio-shell">
       <header className="topbar">
-        <button className="brand-button" type="button" onClick={() => setEntered(false)}>
+        <button className="brand-button" type="button" onClick={() => { setEntered(false); setDoorState("idle"); }}>
           <span className="brand-mark">MS</span>
           <span>
             <strong>{profile.name}</strong>
