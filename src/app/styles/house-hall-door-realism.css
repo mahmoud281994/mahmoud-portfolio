@@ -1,0 +1,257 @@
+/* Architectural depth pass for the house hall doors. */
+
+.house-hall {
+  perspective: 1250px;
+  perspective-origin: 50% 45%;
+}
+
+.hall-door {
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 18px 22px rgba(0,0,0,.18));
+}
+
+/* Dark wall recess behind every door: the door now sits inside an opening instead of on top of the wall. */
+.hall-door::before {
+  content: "";
+  position: absolute;
+  inset: -13px -14px -10px;
+  z-index: -3;
+  background:
+    linear-gradient(90deg,#080d0b 0 7px,#17221d 7px calc(100% - 8px),#070c0a calc(100% - 8px)),
+    linear-gradient(#0a100d,#141d19);
+  border: 1px solid rgba(255,255,255,.025);
+  box-shadow:
+    inset 16px 0 20px rgba(0,0,0,.38),
+    inset -14px 0 18px rgba(0,0,0,.34),
+    inset 0 15px 18px rgba(0,0,0,.28),
+    0 18px 28px rgba(0,0,0,.24);
+}
+
+/* Physical threshold at floor level. */
+.hall-door::after {
+  content: "";
+  position: absolute;
+  z-index: 6;
+  left: -15px;
+  right: -15px;
+  bottom: -13px;
+  height: 13px;
+  background: linear-gradient(180deg,#5c4a3b,#2b231d 72%,#16120f);
+  border-top: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 7px 12px rgba(0,0,0,.35);
+  transform: rotateX(54deg);
+  transform-origin: top center;
+}
+
+.hall-door-frame {
+  inset: 7px;
+  border: 0;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.035),transparent 10% 88%,rgba(0,0,0,.18)),
+    linear-gradient(180deg,#31483c 0%,#263a30 9%,#203229 52%,#19291f 100%);
+  box-shadow:
+    inset 5px 0 0 #3c5245,
+    inset -6px 0 0 #101b16,
+    inset 0 6px 0 #41594b,
+    inset 0 -5px 0 #15221c,
+    0 0 0 1px rgba(255,255,255,.025);
+  transform: translateZ(5px);
+}
+
+/* Raised casing around the jamb. */
+.hall-door-frame::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  z-index: -1;
+  border: 8px solid #29372f;
+  border-left-color: #35483d;
+  border-top-color: #3b4e42;
+  border-right-color: #17221d;
+  border-bottom-color: #111a16;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.025),
+    9px 12px 18px rgba(0,0,0,.3);
+  pointer-events: none;
+}
+
+/* Fine wood grain and slight age variation. */
+.hall-door-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .17;
+  background:
+    repeating-linear-gradient(88deg,transparent 0 16px,rgba(255,255,255,.025) 17px,transparent 18px),
+    repeating-linear-gradient(4deg,transparent 0 34px,rgba(0,0,0,.04) 35px,transparent 36px);
+  mix-blend-mode: soft-light;
+}
+
+.hall-door-panel {
+  left: 13%;
+  right: 13%;
+  border: 0;
+  background: linear-gradient(145deg,rgba(255,255,255,.018),rgba(0,0,0,.055));
+  box-shadow:
+    inset 0 0 0 3px #17271f,
+    inset 0 0 0 5px rgba(65,88,74,.45),
+    inset 7px 9px 14px rgba(0,0,0,.18),
+    2px 2px 0 rgba(255,255,255,.018);
+}
+.hall-door-panel.panel-top { top: 14%; height: 28%; }
+.hall-door-panel.panel-bottom { bottom: 14%; height: 31%; }
+
+.hall-door-handle {
+  right: 9%;
+  top: 52%;
+  width: 9px;
+  height: 9px;
+  background: radial-gradient(circle at 32% 28%,#e0c68a,#9f8557 48%,#5e4b31 100%);
+  box-shadow:
+    0 0 0 5px #17221d,
+    0 0 0 6px rgba(190,166,109,.22),
+    -2px 4px 6px rgba(0,0,0,.4);
+}
+.hall-door-handle::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -10px;
+  width: 17px;
+  height: 30px;
+  z-index: -1;
+  border-radius: 7px;
+  background: linear-gradient(90deg,#473c2b,#846f49,#433724);
+  box-shadow: inset 1px 0 rgba(255,255,255,.12), 2px 4px 5px rgba(0,0,0,.3);
+}
+
+.hall-door strong,
+.hall-door small {
+  text-shadow: 0 1px 2px rgba(0,0,0,.7);
+}
+
+/* Main workspace door is a proper full-height architectural focal point. */
+.hall-workspace-door {
+  left: 50%;
+  top: 17.2%;
+  width: clamp(164px,14.8vw,224px);
+  height: clamp(326px,51vh,458px);
+  transform: translateX(-50%) translateZ(22px);
+  filter: drop-shadow(0 28px 30px rgba(0,0,0,.3));
+}
+.hall-workspace-door::before {
+  inset: -18px -19px -14px;
+  box-shadow:
+    inset 20px 0 25px rgba(0,0,0,.42),
+    inset -18px 0 23px rgba(0,0,0,.4),
+    inset 0 20px 24px rgba(0,0,0,.35),
+    0 24px 40px rgba(0,0,0,.3);
+}
+.hall-workspace-door::after {
+  left: -19px;
+  right: -19px;
+}
+.hall-workspace-door .hall-door-light {
+  top: -43px;
+  width: 43px;
+  height: 9px;
+  box-shadow: 0 0 40px 18px rgba(233,191,109,.24), 0 20px 42px rgba(233,191,109,.1);
+}
+.hall-workspace-door:hover .hall-door-frame,
+.hall-workspace-door:focus-visible .hall-door-frame {
+  transform: perspective(750px) rotateY(-11deg) translateZ(8px);
+}
+
+/* Side doors live on side walls, so their geometry must converge toward the center of the hall. */
+.hall-future-door {
+  opacity: 1;
+  width: clamp(96px,8.1vw,126px);
+  height: clamp(222px,35vh,312px);
+  transform-style: preserve-3d;
+}
+.hall-future-door .hall-door-frame {
+  filter: saturate(.72) brightness(.8);
+}
+.hall-future-door::before {
+  background:
+    linear-gradient(90deg,#070b09 0 8px,#121b17 8px calc(100% - 8px),#060a08 calc(100% - 8px)),
+    #0c120f;
+}
+
+.hall-future-door-1 {
+  left: 3.2%;
+  top: 28%;
+  transform: perspective(850px) rotateY(17deg) scale(.96);
+  transform-origin: left center;
+}
+.hall-future-door-2 {
+  right: 3.4%;
+  top: 28%;
+  transform: perspective(850px) rotateY(-17deg) scale(.96);
+  transform-origin: right center;
+}
+.hall-future-door-3 {
+  left: 22.2%;
+  top: 23.2%;
+  transform: perspective(1000px) rotateY(7deg) scale(.82);
+  transform-origin: left center;
+}
+.hall-future-door-4 {
+  right: 22.2%;
+  top: 23.2%;
+  transform: perspective(1000px) rotateY(-7deg) scale(.82);
+  transform-origin: right center;
+}
+
+/* Side-wall shadow pockets visually embed those doors into the architecture. */
+.hall-future-door-1::before,
+.hall-future-door-3::before {
+  box-shadow:
+    inset 20px 0 24px rgba(0,0,0,.42),
+    inset -8px 0 12px rgba(0,0,0,.22),
+    inset 0 14px 16px rgba(0,0,0,.28),
+    10px 18px 24px rgba(0,0,0,.2);
+}
+.hall-future-door-2::before,
+.hall-future-door-4::before {
+  box-shadow:
+    inset -20px 0 24px rgba(0,0,0,.42),
+    inset 8px 0 12px rgba(0,0,0,.22),
+    inset 0 14px 16px rgba(0,0,0,.28),
+    -10px 18px 24px rgba(0,0,0,.2);
+}
+
+/* Floor contact shadows make the openings feel planted, not floating. */
+.hall-workspace-door,
+.hall-future-door {
+  --door-ground-shadow: rgba(0,0,0,.28);
+}
+.hall-workspace-door > .hall-door-frame,
+.hall-future-door > .hall-door-frame {
+  border-radius: 1px 1px 0 0;
+}
+
+@media (max-width: 760px) {
+  .hall-workspace-door {
+    width: clamp(142px,40vw,182px);
+    height: min(47vh,350px);
+  }
+
+  .hall-future-door {
+    width: clamp(76px,22vw,100px);
+    height: min(29vh,230px);
+  }
+
+  .hall-future-door-1 { left: -3%; top: 32%; }
+  .hall-future-door-2 { right: -3%; top: 32%; }
+  .hall-future-door-3 { left: 16%; top: 27%; transform: perspective(800px) rotateY(7deg) scale(.72); }
+  .hall-future-door-4 { right: 16%; top: 27%; transform: perspective(800px) rotateY(-7deg) scale(.72); }
+
+  .hall-door strong { font-size: .43rem; }
+  .hall-door small { font-size: .34rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hall-door-frame { transition-duration: .01ms !important; }
+}
