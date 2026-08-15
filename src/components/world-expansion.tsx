@@ -56,9 +56,7 @@ export function WorldExpansion() {
             <div className="corridor-floor">
               {Array.from({ length: 7 }).map((_, index) => <i key={index} />)}
             </div>
-            <div className="corridor-lamps">
-              <i /><i /><i />
-            </div>
+            <div className="corridor-lamps"><i /><i /><i /></div>
             <div className="corridor-stairs">
               {Array.from({ length: 8 }).map((_, index) => <i key={index} />)}
             </div>
@@ -81,26 +79,54 @@ export function WorldExpansion() {
             <div className="roof-sky" aria-hidden="true">
               <div className="roof-stars" />
               <div className="roof-moon" />
+              <div className="roof-moon-glow" />
               <div className="roof-cloud roof-cloud-a" />
               <div className="roof-cloud roof-cloud-b" />
               <div className="roof-plane"><i /></div>
+              <div className="roof-haze roof-haze-a" />
+              <div className="roof-haze roof-haze-b" />
             </div>
 
+            <div className="roof-city-glow" aria-hidden="true" />
             <div className="roof-city roof-city-back" aria-hidden="true">
               {Array.from({ length: 14 }).map((_, index) => <i key={index} style={{ "--b": index } as React.CSSProperties} />)}
             </div>
             <div className="roof-city roof-city-front" aria-hidden="true">
               {Array.from({ length: 10 }).map((_, index) => <i key={index} style={{ "--b": index } as React.CSSProperties} />)}
             </div>
+            <div className="roof-road-lights" aria-hidden="true">
+              {Array.from({ length: 11 }).map((_, index) => <i key={index} />)}
+            </div>
 
             <div className="roof-floor" aria-hidden="true" />
+            <div className="roof-floor-grit" aria-hidden="true" />
+            <div className="roof-puddle roof-puddle-a" aria-hidden="true" />
+            <div className="roof-puddle roof-puddle-b" aria-hidden="true" />
             <div className="roof-parapet" aria-hidden="true"><span /><span /><span /></div>
+            <div className="roof-parapet-caps" aria-hidden="true"><i /><i /><i /><i /><i /></div>
+
+            <div className="roof-service-pipes" aria-hidden="true"><i /><i /><i /><span /></div>
+            <div className="roof-cable roof-cable-a" aria-hidden="true" />
+            <div className="roof-cable roof-cable-b" aria-hidden="true" />
+            <div className="roof-vent-stack" aria-hidden="true"><i /><span /></div>
+            <div className="roof-chimney" aria-hidden="true"><i /><span className="chimney-smoke smoke-a" /><span className="chimney-smoke smoke-b" /></div>
+
             <div className="roof-water-tank" aria-hidden="true"><i /><span /></div>
+            <div className="tank-pipes" aria-hidden="true"><i /><i /></div>
             <div className="roof-antenna" aria-hidden="true"><i /><i /><span /></div>
+            <div className="roof-satellite dish-a" aria-hidden="true"><i /><span /></div>
+            <div className="roof-satellite dish-b" aria-hidden="true"><i /><span /></div>
             <div className="roof-ac roof-ac-a" aria-hidden="true"><i /></div>
             <div className="roof-ac roof-ac-b" aria-hidden="true"><i /></div>
-            <div className="roof-string-lights" aria-hidden="true">{Array.from({ length: 9 }).map((_, index) => <i key={index} />)}</div>
+            <div className="roof-ac roof-ac-c" aria-hidden="true"><i /></div>
+
+            <div className="roof-string-lights" aria-hidden="true">
+              {Array.from({ length: 9 }).map((_, index) => <i key={index} />)}
+            </div>
+            <div className="roof-laundry" aria-hidden="true"><span /><i /><i /><i /></div>
+            <div className="roof-crates" aria-hidden="true"><i /><i /><i /></div>
             <div className="roof-bench" aria-hidden="true"><span /><i /><i /></div>
+            <div className="roof-service-light" aria-hidden="true"><i /></div>
 
             <button className="roof-return-door" type="button" onClick={() => setPhase("to-room")} aria-label="Go back downstairs">
               <span className="roof-return-light" />
