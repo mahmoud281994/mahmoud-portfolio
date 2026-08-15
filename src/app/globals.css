@@ -19,5 +19,6 @@
 @import "./styles/house-hall-layer-fix.css";
 @import "./styles/house-hall-door-realism.css";
 @import "./styles/house-hall-door-embedded.css";
+@import "./styles/house-hall-architecture-layout.css";
 
 .immersive-topbar .brand-button .brand-mark { display: grid !important; }
