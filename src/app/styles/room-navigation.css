@@ -1,0 +1,377 @@
+/* Horizontal room exploration: the rooftop door lives beyond the desk view. */
+
+.immersive-room-layout {
+  transition: transform .72s cubic-bezier(.22, 1, .36, 1), filter .45s ease;
+  will-change: transform;
+}
+
+body:has(.world-expansion.phase-room.room-view-door) .immersive-room-layout {
+  transform: translateX(-32vw);
+  filter: brightness(.91);
+}
+
+.world-expansion {
+  position: fixed;
+  inset: 0;
+  z-index: 63;
+  pointer-events: none;
+}
+
+.room-walk-control {
+  position: fixed;
+  top: 50%;
+  z-index: 72;
+  width: 48px;
+  height: 88px;
+  border: 1px solid rgba(221, 238, 228, .12);
+  background: rgba(7, 15, 12, .68);
+  color: #c8ddd0;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, .28);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity .25s ease, transform .25s ease, background .2s ease;
+  font: 700 1.1rem ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.room-walk-control:hover,
+.room-walk-control:focus-visible {
+  background: rgba(20, 38, 31, .9);
+  outline: 1px solid rgba(184, 242, 124, .38);
+}
+
+.room-walk-control small {
+  position: absolute;
+  left: 50%;
+  bottom: 9px;
+  transform: translateX(-50%);
+  writing-mode: vertical-rl;
+  color: rgba(213, 228, 219, .54);
+  font-size: .42rem;
+  letter-spacing: .16em;
+}
+
+.room-walk-right {
+  right: 0;
+  border-right: 0;
+  border-radius: 12px 0 0 12px;
+}
+
+.room-walk-left {
+  left: 0;
+  border-left: 0;
+  border-radius: 0 12px 12px 0;
+}
+
+body:has(.immersive-room) .world-expansion.phase-room.room-view-desk .room-walk-right,
+body:has(.immersive-room) .world-expansion.phase-room.room-view-door .room-walk-left {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body:has(.immersive-room) .world-expansion.phase-room.room-view-desk .room-walk-right {
+  animation: room-edge-nudge 2.8s ease-in-out infinite;
+}
+
+@keyframes room-edge-nudge {
+  0%, 72%, 100% { transform: translateY(-50%) translateX(0); }
+  82% { transform: translateY(-50%) translateX(-5px); }
+  90% { transform: translateY(-50%) translateX(0); }
+}
+
+.room-extension-scene {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 42vw;
+  min-width: 410px;
+  z-index: 64;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform .72s cubic-bezier(.22, 1, .36, 1), opacity .42s ease;
+  background: #14231d;
+  box-shadow: -30px 0 80px rgba(0, 0, 0, .34);
+}
+
+body:has(.immersive-room) .world-expansion.phase-room.room-view-door .room-extension-scene {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.room-extension-wall {
+  position: absolute;
+  inset: 0 0 34%;
+  background:
+    radial-gradient(circle at 62% 33%, rgba(221, 181, 101, .06), transparent 18%),
+    linear-gradient(112deg, #20332a 0%, #192a23 52%, #122019 100%);
+}
+
+.room-extension-wall::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, .025);
+  box-shadow: 110px 0 0 rgba(255,255,255,.018), 245px 0 0 rgba(255,255,255,.018);
+}
+
+.room-extension-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34%;
+  background:
+    repeating-linear-gradient(168deg, transparent 0 84px, rgba(255,255,255,.035) 85px 86px),
+    linear-gradient(90deg, #251c16, #38281d 56%, #211a15);
+  border-top: 1px solid rgba(255,255,255,.035);
+}
+
+.room-extension-floor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 57% 18%, rgba(0,0,0,0), rgba(0,0,0,.28) 82%);
+}
+
+.extension-ceiling-beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 7%;
+  background: #101915;
+  box-shadow: 0 14px 30px rgba(0,0,0,.3);
+}
+
+.extension-door-zone {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 30.5%;
+  width: clamp(150px, 13vw, 205px);
+  height: clamp(285px, 49vh, 430px);
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.extension-door-frame {
+  position: absolute;
+  inset: 0;
+  border: clamp(7px, .65vw, 11px) solid #101815;
+  border-bottom-width: 12px;
+  background: #0f1814;
+  box-shadow: 20px 28px 55px rgba(0,0,0,.38), -8px 0 28px rgba(0,0,0,.18);
+}
+
+.extension-door {
+  position: absolute;
+  inset: 9px;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  color: inherit;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.025), transparent 16% 84%, rgba(0,0,0,.12)),
+    linear-gradient(#293a32, #1b2d25);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.035);
+  transform-origin: left center;
+  transition: transform .42s cubic-bezier(.2,.82,.2,1), filter .25s ease;
+}
+
+.extension-door:hover,
+.extension-door:focus-visible {
+  transform: perspective(600px) rotateY(-8deg);
+  filter: brightness(1.08);
+  outline: none;
+}
+
+.extension-door-panel {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  border: 2px solid rgba(7,13,10,.38);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
+}
+.extension-door-panel-a { top: 13%; height: 29%; }
+.extension-door-panel-b { bottom: 13%; height: 33%; }
+
+.extension-door-window {
+  position: absolute;
+  left: 24%;
+  right: 24%;
+  top: 18%;
+  height: 18%;
+  background:
+    linear-gradient(90deg, transparent 47%, #0c1714 48% 52%, transparent 53%),
+    linear-gradient(#10272e, #1f4444);
+  border: 5px solid #101a16;
+  box-shadow: inset 0 0 18px rgba(87,194,189,.1);
+}
+
+.extension-door-handle {
+  position: absolute;
+  right: 12%;
+  top: 53%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #c3a86f;
+  box-shadow: 0 0 0 4px rgba(0,0,0,.18), 0 0 12px rgba(195,168,111,.12);
+}
+
+.extension-door-light {
+  position: absolute;
+  left: 50%;
+  top: -24px;
+  width: 32px;
+  height: 11px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: #efc779;
+  box-shadow: 0 0 36px 16px rgba(239,199,121,.22);
+}
+
+.extension-door-plaque {
+  position: absolute;
+  top: 47%;
+  left: -70px;
+  width: 52px;
+  padding: 8px 5px;
+  border: 1px solid rgba(219, 230, 223, .12);
+  background: #15231d;
+  color: rgba(221,235,226,.65);
+  text-align: center;
+  font: 700 .5rem ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .1em;
+}
+
+.extension-runner {
+  position: absolute;
+  z-index: 4;
+  left: 35%;
+  right: 7%;
+  bottom: 5%;
+  height: 17%;
+  transform: perspective(420px) rotateX(63deg);
+  transform-origin: bottom center;
+  background: linear-gradient(90deg, #392620, #624238 50%, #34231e);
+  border: 1px solid rgba(255,255,255,.04);
+  box-shadow: 0 15px 25px rgba(0,0,0,.2);
+}
+
+.extension-frame {
+  position: absolute;
+  z-index: 3;
+  right: 8%;
+  top: 16%;
+  width: 92px;
+  height: 72px;
+  padding: 7px;
+  background: #30271f;
+  box-shadow: 8px 10px 20px rgba(0,0,0,.22);
+  transform: rotate(1.5deg);
+}
+.extension-frame span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: #c9bea0;
+  color: #26312b;
+  font: 800 .55rem ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .08em;
+}
+
+.extension-plant {
+  position: absolute;
+  z-index: 5;
+  right: 7%;
+  bottom: 29%;
+  width: 58px;
+  height: 115px;
+}
+.extension-plant::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 0;
+  height: 34%;
+  border-radius: 4px 4px 12px 12px;
+  background: linear-gradient(90deg,#503a2b,#76523a,#463227);
+}
+.extension-plant i {
+  position: absolute;
+  bottom: 28%;
+  left: 45%;
+  width: 18px;
+  height: 62px;
+  border-radius: 100% 0 100% 0;
+  background: #29483a;
+  transform-origin: bottom center;
+}
+.extension-plant i:nth-child(1){transform:rotate(-35deg)}
+.extension-plant i:nth-child(2){transform:rotate(4deg);height:76px}
+.extension-plant i:nth-child(3){transform:rotate(39deg);height:57px}
+
+.room-walk-footsteps {
+  position: fixed;
+  z-index: 71;
+  left: 50%;
+  bottom: 7%;
+  transform: translateX(-50%);
+  color: rgba(217,231,222,.45);
+  font: 700 .48rem ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing: .18em;
+  opacity: 0;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+body:has(.immersive-room) .world-expansion.phase-room.room-view-door .room-walk-footsteps { opacity: .7; }
+
+/* The original floating door is retired. */
+.room-side-door-portal { display: none !important; }
+
+@media (max-width: 760px) {
+  body:has(.world-expansion.phase-room.room-view-door) .immersive-room-layout {
+    transform: translateX(-58vw);
+  }
+
+  .room-extension-scene {
+    width: 72vw;
+    min-width: 0;
+  }
+
+  .extension-door-zone {
+    width: clamp(126px, 38vw, 170px);
+    height: min(46vh, 330px);
+    bottom: 30%;
+  }
+
+  .extension-door-plaque,
+  .extension-frame { display: none; }
+
+  .extension-plant { right: 3%; transform: scale(.75); transform-origin: bottom right; }
+
+  .room-walk-control {
+    width: 42px;
+    height: 78px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .immersive-room-layout,
+  .room-extension-scene,
+  .room-walk-control,
+  .extension-door { transition-duration: .01ms !important; }
+  .room-walk-right { animation: none !important; }
+}
