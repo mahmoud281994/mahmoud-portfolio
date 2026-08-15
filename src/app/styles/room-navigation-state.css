@@ -1,0 +1,36 @@
+.room-navigation {
+  position: fixed;
+  inset: 0;
+  z-index: 63;
+  pointer-events: none;
+}
+
+body:has(.immersive-room):has(.room-navigation.room-view-door) .immersive-room-layout {
+  transform: translateX(-32vw);
+  filter: brightness(.91);
+}
+
+body:has(.immersive-room) .room-navigation.room-view-desk .room-walk-right,
+body:has(.immersive-room) .room-navigation.room-view-door .room-walk-left {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body:has(.immersive-room) .room-navigation.room-view-desk .room-walk-right {
+  animation: room-edge-nudge 2.8s ease-in-out infinite;
+}
+
+body:has(.immersive-room) .room-navigation.room-view-door .room-extension-scene {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+body:has(.immersive-room) .room-navigation.room-view-door .room-walk-footsteps {
+  opacity: .7;
+}
+
+@media (max-width: 760px) {
+  body:has(.immersive-room):has(.room-navigation.room-view-door) .immersive-room-layout {
+    transform: translateX(-58vw);
+  }
+}
