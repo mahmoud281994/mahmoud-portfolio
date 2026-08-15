@@ -1,0 +1,381 @@
+.rooftop-world {
+  background:
+    radial-gradient(circle at 76% 15%, rgba(228,224,189,.045), transparent 19%),
+    linear-gradient(#071015,#081416 64%,#111713);
+}
+
+.rooftop-world::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.08), transparent 36%, rgba(4,9,8,.1) 66%, rgba(0,0,0,.32)),
+    radial-gradient(ellipse at 50% 42%, transparent 28%, rgba(0,0,0,.17) 76%, rgba(0,0,0,.34));
+}
+
+.roof-moon-glow {
+  position:absolute;
+  right:5%;
+  top:2%;
+  width:28vw;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(215,218,192,.12),rgba(215,218,192,.035) 28%,transparent 68%);
+  filter:blur(12px);
+  pointer-events:none;
+}
+
+.roof-haze {
+  position:absolute;
+  left:-10%;
+  width:120%;
+  height:18%;
+  border-radius:50%;
+  filter:blur(24px);
+  opacity:.45;
+  background:linear-gradient(90deg,transparent,rgba(49,91,92,.13),rgba(179,119,66,.04),rgba(49,91,92,.11),transparent);
+  animation:roof-haze-drift 20s ease-in-out infinite alternate;
+}
+.roof-haze-a { bottom:8%; }
+.roof-haze-b { bottom:21%; opacity:.25; animation-delay:-7s; }
+@keyframes roof-haze-drift { to { transform:translateX(4vw) scaleX(1.04); } }
+
+.roof-city-glow {
+  position:absolute;
+  z-index:1;
+  left:0;
+  right:0;
+  bottom:25%;
+  height:22%;
+  background:
+    radial-gradient(ellipse at 28% 100%,rgba(216,152,76,.09),transparent 28%),
+    radial-gradient(ellipse at 74% 100%,rgba(94,169,160,.08),transparent 31%);
+  filter:blur(18px);
+}
+
+.roof-city i {
+  box-shadow:
+    inset 7px 0 0 rgba(255,255,255,.012),
+    inset -6px 0 0 rgba(0,0,0,.08),
+    0 -1px 0 rgba(117,161,154,.05);
+}
+.roof-city i:nth-child(3n)::before {
+  content:"";
+  position:absolute;
+  left:18%;
+  right:18%;
+  top:-7px;
+  height:7px;
+  background:#0b1616;
+  border:1px solid rgba(255,255,255,.025);
+}
+.roof-city i:nth-child(4n+1)::before {
+  content:"";
+  position:absolute;
+  left:49%;
+  top:-22px;
+  width:2px;
+  height:22px;
+  background:#233231;
+  box-shadow:0 -4px 8px rgba(181,101,77,.08);
+}
+
+.roof-road-lights {
+  position:absolute;
+  z-index:5;
+  left:0;
+  right:0;
+  bottom:29%;
+  height:18px;
+  overflow:hidden;
+  opacity:.8;
+}
+.roof-road-lights::before {
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:8px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(228,170,92,.18),rgba(80,145,139,.14),transparent);
+}
+.roof-road-lights i {
+  position:relative;
+  display:inline-block;
+  margin-left:8%;
+  width:4px;
+  height:2px;
+  border-radius:50%;
+  background:#d7ab6a;
+  box-shadow:0 0 8px 2px rgba(215,171,106,.18);
+  animation:road-flicker 3s ease-in-out infinite alternate;
+}
+.roof-road-lights i:nth-child(2n){background:#769f9b;box-shadow:0 0 8px 2px rgba(118,159,155,.14);animation-delay:-1.3s}
+@keyframes road-flicker{to{opacity:.35}}
+
+.roof-floor {
+  background:
+    linear-gradient(155deg,rgba(255,255,255,.016),transparent 26%),
+    repeating-linear-gradient(92deg,transparent 0 118px,rgba(255,255,255,.018) 119px 120px),
+    linear-gradient(165deg,#2d2a24,#1a1d1a 61%,#101310);
+}
+.roof-floor-grit {
+  position:absolute;
+  z-index:8;
+  inset:auto 0 0;
+  height:33%;
+  pointer-events:none;
+  opacity:.34;
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,.12) 0 1px,transparent 1.2px),
+    radial-gradient(circle,rgba(0,0,0,.24) 0 1px,transparent 1.4px);
+  background-size:73px 61px,109px 83px;
+  background-position:15px 18px,51px 37px;
+  mask-image:linear-gradient(180deg,transparent,#000 22%);
+}
+
+.roof-puddle {
+  position:absolute;
+  z-index:9;
+  bottom:5.5%;
+  height:16px;
+  border-radius:50%;
+  transform:skewX(-16deg);
+  background:linear-gradient(90deg,transparent,rgba(62,91,91,.22),rgba(211,201,161,.07),rgba(62,91,91,.18),transparent);
+  box-shadow:inset 0 1px 0 rgba(224,214,178,.08);
+  filter:blur(.2px);
+}
+.roof-puddle-a { left:18%; width:17%; }
+.roof-puddle-b { right:12%; width:13%; bottom:12%; opacity:.65; }
+
+.roof-parapet {
+  border-top:2px solid rgba(161,167,147,.08);
+  background:
+    repeating-linear-gradient(90deg,transparent 0 118px,rgba(255,255,255,.025) 119px 120px),
+    linear-gradient(#3b3e38,#222824 55%,#181d1a);
+}
+.roof-parapet-caps {
+  position:absolute;
+  z-index:9;
+  left:0;
+  right:0;
+  bottom:36.2%;
+  height:7px;
+  pointer-events:none;
+}
+.roof-parapet-caps i {
+  display:inline-block;
+  width:18%;
+  height:100%;
+  margin-right:2%;
+  background:linear-gradient(90deg,#464944,#343a35);
+  box-shadow:0 3px 8px rgba(0,0,0,.22);
+}
+
+.roof-service-pipes {
+  position:absolute;
+  z-index:12;
+  right:1.5%;
+  bottom:29%;
+  width:110px;
+  height:90px;
+}
+.roof-service-pipes i {
+  position:absolute;
+  right:14px;
+  width:8px;
+  border-radius:4px;
+  background:linear-gradient(90deg,#1f2a25,#405046,#202b26);
+  box-shadow:4px 5px 10px rgba(0,0,0,.22);
+}
+.roof-service-pipes i:nth-child(1){height:82px;bottom:0}
+.roof-service-pipes i:nth-child(2){height:58px;bottom:0;right:34px}
+.roof-service-pipes i:nth-child(3){height:38px;bottom:0;right:54px}
+.roof-service-pipes span { position:absolute; right:12px; top:2px; width:46px; height:8px; border-radius:8px; background:#314139; }
+
+.roof-cable {
+  position:absolute;
+  z-index:10;
+  height:2px;
+  background:#0b1110;
+  box-shadow:0 1px 0 rgba(255,255,255,.018);
+  transform-origin:left center;
+}
+.roof-cable-a { left:5%; bottom:14%; width:31%; transform:rotate(4deg); }
+.roof-cable-b { right:6%; bottom:7%; width:24%; transform:rotate(-6deg); }
+
+.roof-vent-stack {
+  position:absolute;
+  z-index:13;
+  left:27%;
+  bottom:27.5%;
+  width:28px;
+  height:64px;
+}
+.roof-vent-stack i { position:absolute; left:9px; bottom:0; width:10px; height:54px; background:linear-gradient(90deg,#202b27,#445048,#1b2521); }
+.roof-vent-stack span { position:absolute; top:2px; left:0; width:28px; height:12px; border-radius:50%; background:#455149; box-shadow:0 5px 0 #222d28; }
+
+.roof-chimney {
+  position:absolute;
+  z-index:12;
+  left:9%;
+  bottom:28%;
+  width:38px;
+  height:102px;
+}
+.roof-chimney > i { position:absolute; inset:22px 6px 0; background:linear-gradient(90deg,#352d27,#504238,#2a241f); border-top:4px solid #675548; }
+.chimney-smoke {
+  position:absolute;
+  left:50%;
+  top:0;
+  width:24px;
+  height:34px;
+  border-radius:50%;
+  background:rgba(120,140,136,.09);
+  filter:blur(5px);
+  animation:chimney-smoke 5s ease-in-out infinite;
+}
+.smoke-b { animation-delay:-2.4s; }
+@keyframes chimney-smoke { 0%{opacity:0;transform:translate(-50%,20px) scale(.5)} 35%{opacity:.55} 100%{opacity:0;transform:translate(-25%,-48px) scale(1.8)} }
+
+.tank-pipes {
+  position:absolute;
+  z-index:10;
+  right:6%;
+  bottom:24%;
+  width:130px;
+  height:95px;
+}
+.tank-pipes i { position:absolute; right:18px; bottom:0; width:7px; height:75px; border-radius:5px; background:#25332d; }
+.tank-pipes i:nth-child(2){right:42px;height:48px}
+
+.roof-water-tank {
+  background:
+    repeating-linear-gradient(180deg,transparent 0 28px,rgba(255,255,255,.028) 29px 30px),
+    linear-gradient(90deg,#15231e,#33443a 45%,#1b2924 74%,#101a17);
+}
+.roof-water-tank::after {
+  content:"WATER  02";
+  position:absolute;
+  left:16%;
+  bottom:13%;
+  color:rgba(202,219,208,.16);
+  font:700 .48rem ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.16em;
+  transform:rotate(-90deg);
+  transform-origin:left bottom;
+}
+
+.roof-satellite {
+  position:absolute;
+  z-index:13;
+  width:86px;
+  height:82px;
+}
+.roof-satellite i {
+  position:absolute;
+  width:64px;
+  height:34px;
+  border-radius:0 0 70px 70px;
+  border:5px solid #3e4943;
+  border-top:0;
+  transform:rotate(-16deg);
+  transform-origin:center top;
+  box-shadow:0 10px 18px rgba(0,0,0,.18);
+}
+.roof-satellite span { position:absolute; left:38px; bottom:0; width:5px; height:54px; background:#333f39; transform:rotate(8deg); }
+.dish-a { left:58%; bottom:26%; }
+.dish-b { left:66%; bottom:27%; transform:scale(.72); opacity:.82; }
+
+.roof-ac {
+  background:linear-gradient(120deg,#4a4d46,#30352f 60%,#222722);
+  box-shadow:11px 15px 28px rgba(0,0,0,.28), inset 0 0 0 1px rgba(255,255,255,.025);
+}
+.roof-ac::before {
+  content:"";
+  position:absolute;
+  right:8%;
+  top:14%;
+  width:22%;
+  height:5px;
+  background:repeating-linear-gradient(180deg,#222824 0 1px,transparent 1px 3px);
+}
+.roof-ac i { animation:ac-fan-spin 8s linear infinite; }
+@keyframes ac-fan-spin { to { transform:rotate(360deg); } }
+.roof-ac-c { left:20%; bottom:7%; transform:scale(.72); opacity:.76; }
+
+.roof-laundry {
+  position:absolute;
+  z-index:14;
+  left:31%;
+  top:24%;
+  width:29%;
+  height:90px;
+  border-top:1px solid rgba(190,190,165,.22);
+  transform:rotate(1.2deg);
+  pointer-events:none;
+}
+.roof-laundry span { position:absolute; left:-2px; top:-6px; width:4px; height:118px; background:#354139; }
+.roof-laundry i { position:relative; display:inline-block; top:2px; width:42px; height:46px; margin-left:14%; background:#354840; opacity:.42; clip-path:polygon(4% 0,96% 0,88% 100%,12% 100%); animation:laundry-wave 3.8s ease-in-out infinite alternate; transform-origin:top center; }
+.roof-laundry i:nth-child(2){background:#5a4b3f;animation-delay:-1.1s}
+.roof-laundry i:nth-child(3){background:#313b43;animation-delay:-2.2s}
+@keyframes laundry-wave { to { transform:skewX(-5deg) rotate(1.5deg); } }
+
+.roof-crates {
+  position:absolute;
+  z-index:13;
+  right:17%;
+  bottom:5%;
+  width:120px;
+  height:76px;
+}
+.roof-crates i { position:absolute; bottom:0; width:48px; height:42px; background:linear-gradient(135deg,#4c3928,#33271d); border:3px solid #211a15; box-shadow:5px 8px 14px rgba(0,0,0,.25); }
+.roof-crates i::before,.roof-crates i::after { content:"";position:absolute;background:rgba(220,184,127,.08); }
+.roof-crates i::before{left:7px;right:7px;top:9px;height:2px}.roof-crates i::after{top:6px;bottom:6px;left:50%;width:2px}
+.roof-crates i:nth-child(1){left:0}.roof-crates i:nth-child(2){left:43px}.roof-crates i:nth-child(3){left:25px;bottom:37px;transform:scale(.86)}
+
+.roof-service-light {
+  position:absolute;
+  z-index:16;
+  left:2.4%;
+  bottom:34%;
+  width:32px;
+  height:18px;
+  border:4px solid #1b211d;
+  background:#d5a95f;
+  box-shadow:0 0 34px 12px rgba(213,169,95,.12);
+}
+.roof-service-light i { position:absolute; left:50%; top:100%; width:2px; height:90px; background:#222a25; }
+
+.roof-bench span {
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.035),transparent 20% 80%,rgba(0,0,0,.12)),
+    linear-gradient(#674f37,#493725);
+  box-shadow:0 9px 0 #35291e,0 17px 24px rgba(0,0,0,.18);
+}
+
+.roof-cat { filter:drop-shadow(0 5px 5px rgba(0,0,0,.3)); }
+.roof-cat::after {
+  content:"";
+  position:absolute;
+  width:38px;
+  height:7px;
+  left:-12px;
+  bottom:-6px;
+  border-radius:50%;
+  background:rgba(0,0,0,.28);
+  filter:blur(3px);
+}
+
+@media (max-width:760px) {
+  .roof-laundry,.dish-b,.roof-crates,.roof-ac-c,.roof-service-pipes { display:none; }
+  .dish-a { left:52%; transform:scale(.78); transform-origin:bottom left; }
+  .roof-puddle-a { width:28%; }
+  .roof-chimney { transform:scale(.72); transform-origin:bottom left; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roof-haze,.roof-road-lights i,.chimney-smoke,.roof-ac i,.roof-laundry i { animation:none !important; }
+}
