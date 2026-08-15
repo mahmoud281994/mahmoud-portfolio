@@ -1,0 +1,249 @@
+/* Architecture layout pass: every doorway is grounded on one continuous floor line. */
+
+.house-hall {
+  --hall-floor-line: 37%;
+  perspective: 1380px;
+  perspective-origin: 50% 48%;
+}
+
+/* Give the hall more breathing room and make the wall/floor join physically continuous. */
+.hall-back-wall {
+  inset: 0 6% var(--hall-floor-line);
+}
+
+.hall-side-wall {
+  width: 15%;
+  bottom: var(--hall-floor-line);
+}
+
+.hall-floor {
+  height: var(--hall-floor-line);
+}
+
+/* All doors are measured from the floor, never from the ceiling. */
+.hall-workspace-door,
+.hall-future-door {
+  top: auto !important;
+  bottom: calc(var(--hall-floor-line) - 1px) !important;
+}
+
+.hall-workspace-door {
+  left: 50%;
+  width: clamp(156px, 13.6vw, 206px);
+  height: clamp(322px, 46vh, 426px);
+  transform: translateX(-50%) translateZ(6px);
+}
+
+.hall-future-door {
+  width: clamp(88px, 7.1vw, 116px);
+  height: clamp(228px, 29vh, 286px);
+}
+
+/* Outer pair belongs to the angled side walls. */
+.hall-future-door-1 {
+  left: 1.5%;
+  right: auto;
+  transform: perspective(1050px) rotateY(15deg) scale(.94);
+  transform-origin: left bottom;
+}
+
+.hall-future-door-2 {
+  right: 1.5%;
+  left: auto;
+  transform: perspective(1050px) rotateY(-15deg) scale(.94);
+  transform-origin: right bottom;
+}
+
+/* Inner pair is farther down the hall and therefore slightly smaller. */
+.hall-future-door-3 {
+  left: 22%;
+  right: auto;
+  transform: perspective(1180px) rotateY(5deg) scale(.82);
+  transform-origin: left bottom;
+}
+
+.hall-future-door-4 {
+  right: 22%;
+  left: auto;
+  transform: perspective(1180px) rotateY(-5deg) scale(.82);
+  transform-origin: right bottom;
+}
+
+/* Thresholds sit just inside the timber floor instead of hovering above it. */
+.hall-door::after {
+  bottom: -6px;
+  height: 7px;
+  transform: rotateX(42deg);
+  box-shadow: 0 2px 5px rgba(0,0,0,.14);
+}
+
+/* Keep furniture in the gaps between circulation paths. */
+.hall-plant-left {
+  left: 15.5%;
+  right: auto;
+  bottom: 17%;
+  transform: scale(.82);
+  transform-origin: bottom center;
+}
+
+.hall-plant-right {
+  right: 15.5%;
+  left: auto;
+  bottom: 17%;
+  transform: scale(.82);
+  transform-origin: bottom center;
+}
+
+.hall-console {
+  left: 30%;
+  width: 11.5%;
+  bottom: 13%;
+  transform: scale(.88);
+  transform-origin: bottom left;
+}
+
+.hall-mirror {
+  left: 10.5%;
+  top: 13%;
+  width: 8.5%;
+  height: 19%;
+}
+
+.hall-gallery {
+  right: 9.5%;
+  top: 10%;
+  width: 15%;
+}
+
+.hall-clock {
+  left: 31.5%;
+  top: 11.5%;
+}
+
+/* The staircase recedes into the far-right architecture instead of colliding with Kitchen. */
+.hall-stairs {
+  z-index: 7;
+  right: -8%;
+  bottom: var(--hall-floor-line);
+  width: 16%;
+  height: 39%;
+  transform: perspective(900px) rotateY(-13deg) scale(.92);
+  transform-origin: right bottom;
+  opacity: .78;
+}
+
+.hall-stairs > b {
+  right: 18%;
+  top: -8%;
+}
+
+.hall-switch {
+  right: 13.8%;
+  top: 44%;
+}
+
+/* The floating duplicate basement sign was fighting the architecture. */
+.hall-basement-sign {
+  display: none;
+}
+
+/* The runner should lead cleanly to the Workspace door. */
+.hall-runner {
+  left: 34%;
+  right: 34%;
+  height: 37%;
+}
+
+/* Slight wall shadows create bays without drawing boxes around the doors. */
+.hall-back-wall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.14) 0 1.5%, transparent 6% 19%,
+      rgba(0,0,0,.055) 22%, transparent 27% 42%,
+      rgba(0,0,0,.04) 45%, transparent 49% 51%,
+      rgba(0,0,0,.04) 55%, transparent 58% 73%,
+      rgba(0,0,0,.055) 78%, transparent 81% 94%,
+      rgba(0,0,0,.14) 98.5% 100%);
+  opacity: .42;
+}
+
+@media (max-width: 900px) {
+  .house-hall {
+    --hall-floor-line: 36%;
+  }
+
+  .hall-workspace-door {
+    width: clamp(146px, 20vw, 188px);
+    height: clamp(300px, 44vh, 390px);
+  }
+
+  .hall-future-door {
+    width: clamp(76px, 10vw, 100px);
+    height: clamp(205px, 27vh, 260px);
+  }
+
+  .hall-future-door-1 { left: -1.5%; }
+  .hall-future-door-2 { right: -1.5%; }
+  .hall-future-door-3 { left: 18.5%; transform: perspective(1050px) rotateY(5deg) scale(.76); }
+  .hall-future-door-4 { right: 18.5%; transform: perspective(1050px) rotateY(-5deg) scale(.76); }
+
+  .hall-plant-left { left: 13%; transform: scale(.68); }
+  .hall-plant-right { right: 13%; transform: scale(.68); }
+  .hall-console { left: 28%; transform: scale(.72); }
+  .hall-gallery { right: 7%; transform: scale(.82); transform-origin: top right; }
+  .hall-clock { left: 29%; transform: scale(.86); }
+}
+
+@media (max-width: 760px) {
+  .house-hall {
+    --hall-floor-line: 35%;
+  }
+
+  .hall-back-wall {
+    inset: 0 3% var(--hall-floor-line);
+  }
+
+  .hall-side-wall {
+    width: 10%;
+    bottom: var(--hall-floor-line);
+  }
+
+  .hall-floor {
+    height: var(--hall-floor-line);
+  }
+
+  .hall-workspace-door {
+    width: clamp(132px, 34vw, 170px);
+    height: min(43vh, 330px);
+  }
+
+  .hall-future-door {
+    width: clamp(68px, 18vw, 88px);
+    height: min(25vh, 215px);
+  }
+
+  .hall-future-door-1 { left: -8%; transform: perspective(850px) rotateY(18deg) scale(.78); }
+  .hall-future-door-2 { right: -8%; transform: perspective(850px) rotateY(-18deg) scale(.78); }
+  .hall-future-door-3 { left: 11%; transform: perspective(900px) rotateY(7deg) scale(.62); }
+  .hall-future-door-4 { right: 11%; transform: perspective(900px) rotateY(-7deg) scale(.62); }
+
+  .hall-plant-left { left: 6%; bottom: 12%; transform: scale(.5); }
+  .hall-plant-right { right: 6%; bottom: 12%; transform: scale(.5); }
+
+  .hall-console,
+  .hall-mirror,
+  .hall-gallery,
+  .hall-clock,
+  .hall-switch,
+  .hall-shoe-rack {
+    opacity: .72;
+  }
+
+  .hall-console { left: 24%; bottom: 8%; transform: scale(.55); }
+  .hall-stairs { right: -13%; width: 20%; opacity: .52; }
+  .hall-runner { left: 27%; right: 27%; }
+}
