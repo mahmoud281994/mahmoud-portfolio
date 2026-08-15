@@ -3,6 +3,7 @@
 :root {
   --room-pan: 0;
   --room-travel: 42vw;
+  --room-join-overlap: 10px;
 }
 
 .immersive-room-layout {
@@ -17,43 +18,64 @@
   pointer-events: none;
 }
 
-/* No navigation chrome: the room itself is the control surface. */
 .room-walk-control,
 .room-walk-footsteps {
   display: none !important;
 }
 
+/*
+ * The extension intentionally overlaps the original room by a few pixels.
+ * Both sides use the exact same wall/floor/ceiling base colors so sub-pixel
+ * transforms can never expose a vertical join while the camera is moving.
+ */
 .room-extension-scene {
   position: fixed;
   top: 0;
-  left: 100vw;
+  left: calc(100vw - var(--room-join-overlap));
   bottom: 0;
-  width: var(--room-travel);
+  width: calc(var(--room-travel) + var(--room-join-overlap) + 2px);
   z-index: 64;
   overflow: hidden;
   pointer-events: none;
   transform: translate3d(calc(var(--room-pan) * var(--room-travel) * -1), 0, 0);
   will-change: transform;
-  background: #14231d;
+  background: #101b17;
+  box-shadow: none;
 }
 
-/* Match the original room geometry so the join disappears while panning. */
+.room-extension-scene::before {
+  content: "";
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--room-join-overlap) + 14px);
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.22), transparent 22%, transparent 70%, rgba(0,0,0,.24)),
+    linear-gradient(115deg,#21312a,#182821 82%);
+  opacity: .98;
+  mask-image: linear-gradient(90deg,#000 0 58%,transparent 100%);
+}
+
 .room-extension-wall {
   position: absolute;
   inset: 0 0 41%;
   background:
     radial-gradient(circle at 62% 33%, rgba(221,181,101,.055), transparent 18%),
-    linear-gradient(112deg,#182821 0%,#182821 18%,#17271f 58%,#132219 100%);
+    linear-gradient(115deg,#21312a 0%,#182821 72%,#17271f 100%);
 }
 
 .room-extension-wall::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background: linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
   background-size: 138px 100%;
-  opacity: .45;
+  background-position: 24px 0;
+  opacity: .34;
+  mask-image: linear-gradient(90deg,transparent 0 30px,#000 90px);
 }
 
 .room-extension-floor {
@@ -64,14 +86,16 @@
   height: 41%;
   background:
     repeating-linear-gradient(168deg,transparent 0 112px,rgba(255,255,255,.028) 113px 114px),
-    linear-gradient(90deg,#34261c,#302219 52%,#251c17);
+    linear-gradient(90deg,#211b16 0%,#34261c 55%,#251c17 100%);
 }
 
 .room-extension-floor::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 52% 18%,transparent,rgba(0,0,0,.23) 84%);
+  inset: 12% 0 0;
+  background:
+    linear-gradient(180deg,transparent,rgba(0,0,0,.2)),
+    radial-gradient(ellipse at 52% 18%,transparent,rgba(0,0,0,.18) 84%);
 }
 
 .extension-ceiling-beam {
@@ -256,11 +280,13 @@
 .extension-plant i:nth-child(2){transform:rotate(4deg);height:76px}
 .extension-plant i:nth-child(3){transform:rotate(39deg);height:57px}
 
-/* The retired floating door must never reappear. */
 .room-side-door-portal { display: none !important; }
 
 @media (max-width: 760px) {
-  :root { --room-travel: 72vw; }
+  :root {
+    --room-travel: 72vw;
+    --room-join-overlap: 12px;
+  }
 
   .extension-door-zone {
     width: clamp(126px,38vw,170px);
