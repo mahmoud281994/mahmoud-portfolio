@@ -17,11 +17,20 @@ export function HouseHall() {
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    if (hasVisited) return;
-
     const check = () => {
+      const outside = document.querySelector(".entry-scene");
+
+      // Returning outside starts a brand-new house visit. The next time the
+      // interior mounts, the hall must gate the workspace again.
+      if (outside) {
+        setVisible(false);
+        setLeaving(false);
+        setHasVisited(false);
+        return;
+      }
+
       const room = document.querySelector(".immersive-room");
-      if (room) setVisible(true);
+      if (room && !hasVisited) setVisible(true);
     };
 
     check();
