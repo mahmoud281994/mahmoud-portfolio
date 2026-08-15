@@ -1,0 +1,196 @@
+/* Final integration pass: doors are cut into the hall walls, not mounted as cards. */
+
+.house-hall {
+  --hall-wall-main: #1b2b24;
+  --hall-wall-mid: #17261f;
+  --hall-wall-side: #132019;
+  --hall-trim-light: #30443a;
+  --hall-trim-mid: #25382f;
+  --hall-trim-dark: #101915;
+}
+
+.hall-door {
+  filter: none;
+}
+
+/* The opening itself now borrows the wall palette and reads as a cavity in plaster. */
+.hall-door::before {
+  inset: -9px -10px -7px;
+  background:
+    linear-gradient(90deg,
+      rgba(7,12,10,.56) 0 4px,
+      var(--hall-wall-mid) 4px calc(100% - 4px),
+      rgba(6,10,8,.5) calc(100% - 4px)),
+    linear-gradient(180deg,var(--hall-wall-main),var(--hall-wall-side));
+  border: 0;
+  box-shadow:
+    inset 7px 0 10px rgba(0,0,0,.22),
+    inset -7px 0 10px rgba(0,0,0,.2),
+    inset 0 8px 11px rgba(0,0,0,.2),
+    0 3px 0 rgba(255,255,255,.018);
+}
+
+/* Threshold becomes part of the floor, not a floating wooden shelf. */
+.hall-door::after {
+  left: -8px;
+  right: -8px;
+  bottom: -7px;
+  height: 8px;
+  background: linear-gradient(180deg,#423228,#2f251e 68%,#241c17);
+  border-top: 1px solid rgba(255,255,255,.045);
+  box-shadow: 0 3px 7px rgba(0,0,0,.18);
+  transform: rotateX(48deg);
+}
+
+.hall-door-frame {
+  inset: 4px;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.016),transparent 10% 90%,rgba(0,0,0,.08)),
+    linear-gradient(180deg,#294036 0%,#23372e 45%,#1d3028 100%);
+  box-shadow:
+    inset 2px 0 0 rgba(75,103,87,.36),
+    inset -3px 0 0 rgba(8,15,12,.38),
+    inset 0 2px 0 rgba(80,110,92,.24),
+    inset 0 -2px 0 rgba(8,14,11,.25);
+  transform: translateZ(2px);
+}
+
+/* Thin painted trim that belongs to the wall instead of a thick picture-frame casing. */
+.hall-door-frame::before {
+  inset: -7px;
+  border: 4px solid var(--hall-trim-mid);
+  border-left-color: var(--hall-trim-light);
+  border-top-color: #34483d;
+  border-right-color: #17251f;
+  border-bottom-color: #15221c;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.018),
+    3px 4px 7px rgba(0,0,0,.16);
+}
+
+.hall-door-frame::after {
+  opacity: .09;
+}
+
+.hall-door-panel {
+  box-shadow:
+    inset 0 0 0 2px #17271f,
+    inset 0 0 0 3px rgba(73,96,82,.26),
+    inset 4px 5px 8px rgba(0,0,0,.12),
+    1px 1px 0 rgba(255,255,255,.012);
+}
+
+.hall-door-handle {
+  box-shadow:
+    0 0 0 3px #1b2822,
+    0 0 0 4px rgba(190,166,109,.13),
+    -1px 2px 4px rgba(0,0,0,.28);
+}
+
+.hall-door-handle::before {
+  width: 15px;
+  height: 27px;
+  left: -3px;
+  top: -9px;
+  box-shadow: inset 1px 0 rgba(255,255,255,.08),1px 3px 4px rgba(0,0,0,.22);
+}
+
+/* Workspace is still the focal opening, but the wall wraps around it naturally. */
+.hall-workspace-door {
+  top: 18.4%;
+  width: clamp(158px,14.2vw,216px);
+  height: clamp(318px,49vh,442px);
+  transform: translateX(-50%) translateZ(8px);
+  filter: none;
+}
+
+.hall-workspace-door::before {
+  inset: -11px -12px -8px;
+  background:
+    linear-gradient(90deg,
+      rgba(5,9,7,.5) 0 5px,
+      var(--hall-wall-main) 5px calc(100% - 5px),
+      rgba(5,9,7,.46) calc(100% - 5px)),
+    var(--hall-wall-main);
+  box-shadow:
+    inset 9px 0 13px rgba(0,0,0,.24),
+    inset -9px 0 13px rgba(0,0,0,.22),
+    inset 0 10px 14px rgba(0,0,0,.23);
+}
+
+.hall-workspace-door::after {
+  left: -11px;
+  right: -11px;
+}
+
+.hall-workspace-door .hall-door-light {
+  top: -34px;
+  box-shadow: 0 0 34px 14px rgba(233,191,109,.18),0 17px 35px rgba(233,191,109,.08);
+}
+
+.hall-workspace-door:hover .hall-door-frame,
+.hall-workspace-door:focus-visible .hall-door-frame {
+  transform: perspective(760px) rotateY(-8deg) translateZ(4px);
+}
+
+/* Side doors are visually carved into their respective wall planes. */
+.hall-future-door::before {
+  background:
+    linear-gradient(90deg,
+      rgba(5,9,7,.38) 0 4px,
+      var(--hall-wall-side) 4px calc(100% - 4px),
+      rgba(5,9,7,.34) calc(100% - 4px)),
+    var(--hall-wall-side);
+  box-shadow:
+    inset 6px 0 9px rgba(0,0,0,.2),
+    inset -6px 0 9px rgba(0,0,0,.18),
+    inset 0 7px 9px rgba(0,0,0,.19);
+}
+
+.hall-future-door .hall-door-frame {
+  filter: saturate(.78) brightness(.86);
+}
+
+.hall-future-door-1 {
+  left: 1.4%;
+  top: 29%;
+  transform: perspective(920px) rotateY(20deg) scale(.95);
+}
+.hall-future-door-2 {
+  right: 1.6%;
+  top: 29%;
+  transform: perspective(920px) rotateY(-20deg) scale(.95);
+}
+.hall-future-door-3 {
+  left: 21.8%;
+  top: 24.6%;
+  transform: perspective(1050px) rotateY(8deg) scale(.78);
+}
+.hall-future-door-4 {
+  right: 21.8%;
+  top: 24.6%;
+  transform: perspective(1050px) rotateY(-8deg) scale(.78);
+}
+
+/* Remove the previous independent shadow pockets so no door reads like a card. */
+.hall-future-door-1::before,
+.hall-future-door-2::before,
+.hall-future-door-3::before,
+.hall-future-door-4::before {
+  box-shadow:
+    inset 6px 0 9px rgba(0,0,0,.2),
+    inset -6px 0 9px rgba(0,0,0,.18),
+    inset 0 7px 9px rgba(0,0,0,.19);
+}
+
+@media (max-width: 760px) {
+  .hall-workspace-door {
+    width: clamp(136px,38vw,176px);
+    height: min(45vh,340px);
+  }
+
+  .hall-future-door-1 { left:-5%; top:33%; }
+  .hall-future-door-2 { right:-5%; top:33%; }
+  .hall-future-door-3 { left:15%; top:28%; transform:perspective(820px) rotateY(8deg) scale(.68); }
+  .hall-future-door-4 { right:15%; top:28%; transform:perspective(820px) rotateY(-8deg) scale(.68); }
+}
