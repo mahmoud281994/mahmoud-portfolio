@@ -15,5 +15,6 @@
 @import "./styles/rooftop-detail-pass.css";
 @import "./styles/room-navigation.css";
 @import "./styles/room-navigation-state.css";
+@import "./styles/house-hall.css";
 
 .immersive-topbar .brand-button .brand-mark { display: grid !important; }
