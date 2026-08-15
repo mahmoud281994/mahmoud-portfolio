@@ -1,21 +1,98 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-type RoomView = "desk" | "door";
+import { useEffect, useRef } from "react";
 
 export function RoomNavigation() {
-  const [view, setView] = useState<RoomView>("desk");
+  const progressRef = useRef(0);
+  const velocityRef = useRef(0);
+  const touchStartRef = useRef<{ x: number; progress: number } | null>(null);
 
   useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (!document.querySelector(".immersive-room")) return;
-      if (event.key === "ArrowRight") setView("door");
-      if (event.key === "ArrowLeft") setView("desk");
+    const root = document.documentElement;
+    let frame = 0;
+
+    const setProgress = (value: number) => {
+      const next = Math.max(0, Math.min(1, value));
+      progressRef.current = next;
+      root.style.setProperty("--room-pan", next.toFixed(4));
     };
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    const canWalk = () => {
+      const room = document.querySelector<HTMLElement>(".immersive-room");
+      if (!room) return false;
+      if (document.querySelector(".rooftop-world, .corridor-transition")) return false;
+      return room.dataset.active === "none" || !room.dataset.active;
+    };
+
+    const onMouseMove = (event: MouseEvent) => {
+      if (!canWalk()) {
+        velocityRef.current = 0;
+        return;
+      }
+
+      const width = window.innerWidth;
+      const x = event.clientX / width;
+      const edge = 0.22;
+
+      if (x > 1 - edge) {
+        const strength = (x - (1 - edge)) / edge;
+        velocityRef.current = 0.006 + strength * 0.018;
+      } else if (x < edge) {
+        const strength = (edge - x) / edge;
+        velocityRef.current = -(0.006 + strength * 0.018);
+      } else {
+        velocityRef.current = 0;
+      }
+    };
+
+    const onMouseLeave = () => {
+      velocityRef.current = 0;
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      if (!canWalk() || event.touches.length !== 1) return;
+      touchStartRef.current = {
+        x: event.touches[0].clientX,
+        progress: progressRef.current,
+      };
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!touchStartRef.current || event.touches.length !== 1 || !canWalk()) return;
+      const delta = touchStartRef.current.x - event.touches[0].clientX;
+      setProgress(touchStartRef.current.progress + delta / (window.innerWidth * 0.72));
+    };
+
+    const onTouchEnd = () => {
+      touchStartRef.current = null;
+    };
+
+    const tick = () => {
+      if (velocityRef.current !== 0 && canWalk()) {
+        setProgress(progressRef.current + velocityRef.current);
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    root.style.setProperty("--room-pan", "0");
+    frame = window.requestAnimationFrame(tick);
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    document.documentElement.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("mousemove", onMouseMove);
+      document.documentElement.removeEventListener("mouseleave", onMouseLeave);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
+      root.style.removeProperty("--room-pan");
+    };
   }, []);
 
   const goToRooftop = () => {
@@ -24,28 +101,8 @@ export function RoomNavigation() {
   };
 
   return (
-    <div className={`room-navigation room-view-${view}`} aria-label="Room exploration controls">
-      <button
-        className="room-walk-control room-walk-right"
-        type="button"
-        onClick={() => setView("door")}
-        aria-label="Walk to the right side of the room"
-      >
-        →
-        <small>WALK</small>
-      </button>
-
-      <button
-        className="room-walk-control room-walk-left"
-        type="button"
-        onClick={() => setView("desk")}
-        aria-label="Walk back to the desk"
-      >
-        ←
-        <small>DESK</small>
-      </button>
-
-      <div className="room-extension-scene" aria-hidden={view !== "door"}>
+    <div className="room-navigation" aria-label="Walkable room extension">
+      <div className="room-extension-scene">
         <div className="room-extension-wall" />
         <div className="room-extension-floor" />
         <div className="extension-ceiling-beam" />
@@ -77,8 +134,6 @@ export function RoomNavigation() {
           </div>
         </div>
       </div>
-
-      <div className="room-walk-footsteps" aria-hidden="true">← BACK TO DESK · ROOF ACCESS AHEAD</div>
     </div>
   );
 }
