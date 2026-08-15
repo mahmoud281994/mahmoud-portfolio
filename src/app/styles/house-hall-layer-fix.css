@@ -1,0 +1,50 @@
+/* Prevent any developer-room/world bleed-through while the house hall is active. */
+
+.house-hall {
+  inset: -2px !important;
+  width: calc(100vw + 4px);
+  height: calc(100svh + 4px);
+  min-height: calc(100vh + 4px);
+  z-index: 240 !important;
+  background: #151d19 !important;
+  contain: paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Solid underlay guarantees the hall never exposes the room at viewport edges. */
+.house-hall::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: -2;
+  background: #151d19;
+  pointer-events: none;
+}
+
+/* Keep the hall's own scene above the opaque underlay. */
+.house-hall > * {
+  position: absolute;
+}
+
+/* While the hall exists, freeze and visually suppress all room/world layers below it. */
+body:has(.house-hall) .portfolio-shell,
+body:has(.house-hall) .world-expansion,
+body:has(.house-hall) .room-navigation {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* The hall itself must remain visible even though it is mounted alongside those layers. */
+body:has(.house-hall) .house-hall {
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+@media (max-width: 760px) {
+  .house-hall {
+    inset: -3px !important;
+    width: calc(100vw + 6px);
+    height: calc(100svh + 6px);
+  }
+}
